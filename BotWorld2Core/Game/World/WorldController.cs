@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BotWorld2Core.Game.General;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,11 @@ namespace BotWorld2Core.Game.World
         public readonly int Width, Height;
         private WorldCell[,] _world;
 
-        public WorldController(IWorldCreationScheme scheme, int width, int height)
+        public WorldController(IWorldCreationScheme scheme, Vector2int size)
         {
-            _world = new WorldCell[width, height];
-            Width = width;
-            Height = height;
+            Width = size.X;
+            Height = size.Y;
+            _world = new WorldCell[Width, Height];
             InitializeCells(scheme);
         }
         public void Reset()
@@ -41,10 +42,10 @@ namespace BotWorld2Core.Game.World
                 }
             }
         }
-        public WorldCell GetCell(int x, int y)
+        public WorldCell GetCell(Vector2int pos)
         {
-            if (x >= 0 && x < Width && y >= 0 && y < Height)
-                return _world[x, y];
+            if (pos.X >= 0 && pos.X < Width && pos.Y >= 0 && pos.Y < Height)
+                return _world[pos.X, pos.Y];
             throw new ArgumentException();
         }
         private void CellUpdatedHandler(WorldCell cell)

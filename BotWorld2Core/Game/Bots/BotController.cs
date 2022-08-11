@@ -11,6 +11,11 @@ namespace BotWorld2Core.Game.Bots
     {
         private BotModel _model;
 
+        public BotController(BotModel model) : base()
+        {
+            _model = model;
+        }
+
         protected override void Update()
         {
             var datas = GetSensorsData();

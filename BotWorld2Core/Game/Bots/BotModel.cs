@@ -1,6 +1,7 @@
 ﻿using BotWorld2Core.Game.Ai;
 using BotWorld2Core.Game.Bots.Actions;
 using BotWorld2Core.Game.Bots.Sensors;
+using BotWorld2Core.Game.General;
 using System.Numerics;
 
 namespace BotWorld2Core.Game.Bots
@@ -28,8 +29,8 @@ namespace BotWorld2Core.Game.Bots
                 _energy = Math.Clamp(value, 0f, MaxEnergy);
             }
         }
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        public Vector2int Position;
+        public Vector2int Forward;
 
         public readonly NeuronNetwork Brain;
         public readonly BotSensor[] Sensors;
@@ -38,7 +39,9 @@ namespace BotWorld2Core.Game.Bots
         private float _health;
         private float _energy;
 
-        public BotModel(NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, int x, int y)
+        private BotController _controller;
+
+        public BotModel(NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position)
         {
             if (brain == null 
                 || sensors == null || sensors.Any(e => e == null) 
@@ -51,13 +54,17 @@ namespace BotWorld2Core.Game.Bots
             Brain = brain;
             Sensors = sensors;
             Actions = actions;
+
             _health = GameSettings.StartHealth;
             _energy = GameSettings.StartEnergy;
-            X = x;
-            Y = y;
+
+            Position = position;
+            Forward = new Vector2int(1, 0);
 
             BindComponents(sensors);
             BindComponents(actions);
+
+            _controller = new BotController(this);
         }
 
         private void BindComponents(BotComponent[] sensors)

@@ -1,3 +1,5 @@
+using BotWorld2Core.Game.General;
+
 namespace BotWorld2Core.Game.Ai
 {
     public class RandomNeuron : Neuron
