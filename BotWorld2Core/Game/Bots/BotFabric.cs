@@ -19,7 +19,11 @@ namespace BotWorld2Core.Game.Bots
             .Where(e => typeof(Neuron).IsAssignableFrom(e))
             .ToArray();
         private Random _random = Global.Random;
-
+        private WorldController _worldController;
+        public BotFabric(WorldController worldController)
+        {
+            _worldController = worldController;
+        }
         public BotModel CreateRandom(int posX, int posY)
         {
             var layers = new NeuronLayer[2 + GameSettings.BotHiddenLayersCount];
@@ -51,7 +55,7 @@ namespace BotWorld2Core.Game.Bots
             var positionFound = false;
             for (int i = 0; i < 8; i++)
             {
-                var cell = Global.WorldController.GetCell(offset + parent.Position);
+                var cell = _worldController.GetCell(offset + parent.Position);
                 if (cell != null && cell.CanStayHere)
                 {
                     positionFound = true;
