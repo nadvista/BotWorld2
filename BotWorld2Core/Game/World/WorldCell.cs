@@ -31,29 +31,49 @@ namespace BotWorld2Core.Game.World
         public BotModel GetBot() => _currentBot;
         public void PlaceBot(BotModel model)
         {
-            _currentBot = model;
-            Updated?.Invoke(this);
+            object locker = new();
+            lock (locker)
+            {
+                _currentBot = model;
+                Updated?.Invoke(this);
+            }
         }
         public void RemoveBot()
         {
-            _currentBot = null;
-            Updated?.Invoke(this);
+            object locker = new();
+            lock (locker)
+            {
+                _currentBot = null;
+                Updated?.Invoke(this);
+            }
         }
         public void PlaceFood()
         {
-            HasFood = true;
-            Updated?.Invoke(this);
+            object locker = new();
+            lock (locker)
+            {
+                HasFood = true;
+                Updated?.Invoke(this);
+            }
         }
         public void TakeFood()
         {
-            HasFood = false;
-            Updated?.Invoke(this);
+            object locker = new();
+            lock (locker)
+            {
+                HasFood = false;
+                Updated?.Invoke(this);
+            }
         }
         public void Reset()
         {
-            _currentBot = null;
-            HasFood = false;
-            Updated?.Invoke(this);
+            object locker = new();
+            lock (locker)
+            {
+                _currentBot = null;
+                HasFood = false;
+                Updated?.Invoke(this);
+            }
         }
     }
 }

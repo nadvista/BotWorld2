@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BotWorld2Core.Game.World
+namespace BotWorld2Core.Game.Bots.Sensors
 {
-    internal interface IWorldCreationScheme
+    internal class EyeSensor
     {
-        public WorldCell GetCell(int x, int y);
     }
 }

@@ -20,5 +20,13 @@ namespace BotWorld2Core.Game.General
 
         public const float MutationChance = .05f;
         #endregion
+
+        #region World
+        public const int WorldWidth = 100, WorldHeight = 100;
+        #endregion
+
+        #region Program
+        public const int ThreadsCount;
+        #endregion
     }
 }

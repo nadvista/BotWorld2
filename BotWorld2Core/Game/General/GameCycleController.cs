@@ -8,11 +8,42 @@ namespace BotWorld2Core.Game.General
 {
     internal class GameCycleController
     {
-        public static event Action OnUpdate;
-
-        public void CallUpdate()
+        private List<Updatable> _updatables = new List<Updatable>();
+        public void AddUpdatable(Updatable updatable)
         {
-            OnUpdate?.Invoke();
+            _updatables.Add(updatable);
+            SetupThreads();
+        }
+
+        private ThreadUpdatables[] _threads = new ThreadUpdatables[GameSettings.ThreadsCount];
+
+        public bool TryCallUpdate()
+        {
+            if (!_threads.All(e => e.IsStopped())) return false;
+            for(int i = 0; i < _threads.Length; i++)
+            {
+                var thread = _threads[i];
+                thread.Update();
+            }
+            return true;
+        }
+
+        private void SetupThreads()
+        {
+            var updatablesPerThreadFloat = _updatables.Count / (float)GameSettings.ThreadsCount;
+            var updatablesPerThreadInt = (int)Math.Floor(updatablesPerThreadFloat);
+            var updatablesAdded = 0;
+
+            for (int i = 0; i < GameSettings.ThreadsCount - 1; i++)
+            {
+                var currentUpdatables = _updatables.GetRange(i * updatablesPerThreadInt, updatablesPerThreadInt).ToArray();
+                var threadUpdatables = new ThreadUpdatables(currentUpdatables);
+                updatablesAdded += currentUpdatables.Length;
+
+                _threads[i] = threadUpdatables;
+            }
+            var lastUpdatables = _updatables.GetRange(updatablesAdded-1,_updatables.Count - updatablesAdded).ToArray();
+            _threads[^1] = new ThreadUpdatables(lastUpdatables);
         }
     }
 }

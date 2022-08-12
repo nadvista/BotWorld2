@@ -10,8 +10,7 @@ namespace BotWorld2Core.Game.General
     {
         public Updatable()
         {
-            GameCycleController.OnUpdate += Update;
         }
-        protected abstract void Update();
+        public abstract void Update();
     }
 }

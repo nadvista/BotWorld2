@@ -6,9 +6,12 @@ namespace BotWorld2Core.Game.Ai
 {
     public class NeuronNetwork
     {
+        private const int MAX_MEMORY_LEN = 5000;
         private NeuronLayer[] _layers;
         public readonly int InputLayerLength;
         public readonly int OutputLayerLength;
+
+        private Dictionary<string, double[]> _memory = new Dictionary<string, double[]>();
 
         public NeuronNetwork(params NeuronLayer[] layers)
         {
@@ -56,6 +59,10 @@ namespace BotWorld2Core.Game.Ai
 
         public double[] Calculate(double[] input)
         {
+            var key = string.Join("",input);
+            if(_memory.ContainsKey(key))
+                return (double[])_memory[key].Clone();
+
             if(input.Length != InputLayerLength)
                 throw new ArgumentException();
             if(_layers.Length < 2)
@@ -70,7 +77,12 @@ namespace BotWorld2Core.Game.Ai
                 var currentLayerOut = currentLayer.GetLayerOutput();
                 nextLayer.SetLayerInput(currentLayerOut);
             }
-            return _layers[^1].GetLayerOutput();
+            var output = _layers[^1].GetLayerOutput();
+
+            if(_memory.Count < MAX_MEMORY_LEN)
+                _memory.Add(key, (double[])output);
+
+            return output;
         }
         public void Clear()
         {
