@@ -3,12 +3,7 @@ using BotWorld2Core.Game.Bots.Actions;
 using BotWorld2Core.Game.Bots.Sensors;
 using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BotWorld2Core.Game.Bots
 {
@@ -19,10 +14,10 @@ namespace BotWorld2Core.Game.Bots
             .Where(e => typeof(Neuron).IsAssignableFrom(e))
             .ToArray();
         private Random _random = Global.Random;
-        private WorldController _worldController;
+        private WorldController _world;
         public BotFabric(WorldController worldController)
         {
-            _worldController = worldController;
+            _world = worldController;
         }
         public BotModel CreateRandom(int posX, int posY)
         {
@@ -43,7 +38,7 @@ namespace BotWorld2Core.Game.Bots
 
             var network = new NeuronNetwork(layers);
 
-            var bot = new BotModel(network, sensors, actions, new Vector2int(posX,posY));
+            var bot = new BotModel(network, sensors, actions, new Vector2int(posX, posY));
             return bot;
         }
         public bool CreateChild(BotModel parent, out BotModel child)
@@ -55,7 +50,7 @@ namespace BotWorld2Core.Game.Bots
             var positionFound = false;
             for (int i = 0; i < 8; i++)
             {
-                var cell = _worldController.GetCell(offset + parent.Position);
+                var cell = _world.GetCell(offset + parent.Position);
                 if (cell != null && cell.CanStayHere)
                 {
                     positionFound = true;
@@ -114,12 +109,17 @@ namespace BotWorld2Core.Game.Bots
 
         private BotSensor[] CreateSensors()
         {
-            throw new NotImplementedException();
+            return new BotSensor[] {
+                new EyeSensor(_world),
+                new PositionRotationSensor()
+            };
         }
 
         private BotAction[] CreateActions()
         {
-            throw new NotImplementedException();
+            return new BotAction[] {
+                new MoveBotAction(_world)
+            };
         }
     }
 }

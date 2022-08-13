@@ -2,7 +2,6 @@
 using BotWorld2Core.Game.Bots.Actions;
 using BotWorld2Core.Game.Bots.Sensors;
 using BotWorld2Core.Game.General;
-using System.Numerics;
 
 namespace BotWorld2Core.Game.Bots
 {
@@ -11,9 +10,9 @@ namespace BotWorld2Core.Game.Bots
         public event Action<BotModel> OnDead;
         public float MaxHealth => GameSettings.MaxHealth;
         public float MaxEnergy => GameSettings.MaxEnergy;
-        public float Health 
-        { 
-            get => _health; 
+        public float Health
+        {
+            get => _health;
             private set
             {
                 _health = Math.Clamp(value, 0f, MaxHealth);
@@ -21,9 +20,9 @@ namespace BotWorld2Core.Game.Bots
                     OnDead?.Invoke(this);
             }
         }
-        public float Energy 
-        { 
-            get => _energy; 
+        public float Energy
+        {
+            get => _energy;
             private set
             {
                 _energy = Math.Clamp(value, 0f, MaxEnergy);
@@ -43,14 +42,14 @@ namespace BotWorld2Core.Game.Bots
 
         public BotModel(NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position)
         {
-            if (brain == null 
-                || sensors == null || sensors.Any(e => e == null) 
-                || actions == null || actions.Any(e => e == null)) 
+            if (brain == null
+                || sensors == null || sensors.Any(e => e == null)
+                || actions == null || actions.Any(e => e == null))
                 throw new ArgumentNullException();
-            if(brain.InputLayerLength != sensors.Length
+            if (brain.InputLayerLength != sensors.Length
                 || brain.OutputLayerLength != actions.Length)
                 throw new ArgumentException();
-            
+
             Brain = brain;
             Sensors = sensors;
             Actions = actions;

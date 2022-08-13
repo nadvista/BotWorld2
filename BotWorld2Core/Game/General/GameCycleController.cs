@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BotWorld2Core.Game.General
+﻿namespace BotWorld2Core.Game.General
 {
     internal class GameCycleController
     {
@@ -20,7 +14,7 @@ namespace BotWorld2Core.Game.General
         public bool TryCallUpdate()
         {
             if (!_threads.All(e => e.IsStopped())) return false;
-            for(int i = 0; i < _threads.Length; i++)
+            for (int i = 0; i < _threads.Length; i++)
             {
                 var thread = _threads[i];
                 thread.Update();
@@ -42,7 +36,7 @@ namespace BotWorld2Core.Game.General
 
                 _threads[i] = threadUpdatables;
             }
-            var lastUpdatables = _updatables.GetRange(updatablesAdded-1,_updatables.Count - updatablesAdded).ToArray();
+            var lastUpdatables = _updatables.GetRange(updatablesAdded - 1, _updatables.Count - updatablesAdded).ToArray();
             _threads[^1] = new ThreadUpdatables(lastUpdatables);
         }
     }

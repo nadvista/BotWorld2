@@ -1,11 +1,6 @@
 ﻿using BotWorld2Core.Game.Bots;
 using BotWorld2Core.Game.World;
 using BotWorld2Core.Game.World.Schemes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BotWorld2Core.Game.General
 {
@@ -17,7 +12,7 @@ namespace BotWorld2Core.Game.General
         private List<BotModel> _bots = new List<BotModel>();
         public GameManager()
         {
-            _worldController = new WorldController(new IslandCreationScheme(),new Vector2int(GameSettings.WorldWidth,GameSettings.WorldHeight));
+            _worldController = new WorldController(new IslandCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
             _gameCycleController = new GameCycleController();
             _fabric = new BotFabric(_worldController);
 

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace BotWorld2Core.Game.Ai
 {
     public class NeuronNetwork
@@ -15,12 +11,12 @@ namespace BotWorld2Core.Game.Ai
 
         public NeuronNetwork(params NeuronLayer[] layers)
         {
-            if(layers.Length < 2)
+            if (layers.Length < 2)
                 throw new ArgumentException();
 
             _layers = new NeuronLayer[layers.Length];
 
-            for (int i = 0; i < layers.Length-1; i++)
+            for (int i = 0; i < layers.Length - 1; i++)
             {
                 var currentLayer = layers[i];
                 var nextLayer = layers[i + 1];
@@ -35,7 +31,7 @@ namespace BotWorld2Core.Game.Ai
         {
             _layers = new NeuronLayer[scheme.NeuronTypes.Length];
             //creating layers
-            for (int layerIndex= 0; layerIndex < scheme.NeuronTypes.Length; layerIndex++)
+            for (int layerIndex = 0; layerIndex < scheme.NeuronTypes.Length; layerIndex++)
             {
                 var layerNeurons = new Neuron[scheme.NeuronTypes[layerIndex].Length];
                 for (int neuronIndex = 0; neuronIndex < layerNeurons.Length; neuronIndex++)
@@ -59,34 +55,34 @@ namespace BotWorld2Core.Game.Ai
 
         public double[] Calculate(double[] input)
         {
-            var key = string.Join("",input);
-            if(_memory.ContainsKey(key))
+            var key = string.Join("", input);
+            if (_memory.ContainsKey(key))
                 return (double[])_memory[key].Clone();
 
-            if(input.Length != InputLayerLength)
+            if (input.Length != InputLayerLength)
                 throw new ArgumentException();
-            if(_layers.Length < 2)
+            if (_layers.Length < 2)
                 throw new ArgumentException();
 
             _layers[0].SetLayerInput(input);
             for (int layerIndex = 0; layerIndex < _layers.Length - 1; layerIndex++)
             {
                 var currentLayer = _layers[layerIndex];
-                var nextLayer = _layers[layerIndex+1];
+                var nextLayer = _layers[layerIndex + 1];
 
                 var currentLayerOut = currentLayer.GetLayerOutput();
                 nextLayer.SetLayerInput(currentLayerOut);
             }
             var output = _layers[^1].GetLayerOutput();
 
-            if(_memory.Count < MAX_MEMORY_LEN)
+            if (_memory.Count < MAX_MEMORY_LEN)
                 _memory.Add(key, (double[])output);
 
             return output;
         }
         public void Clear()
         {
-            foreach(var layer in _layers)
+            foreach (var layer in _layers)
                 layer.Clear();
         }
         public double[][,] ExportWeights()

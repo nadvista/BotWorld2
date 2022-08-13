@@ -18,38 +18,38 @@ namespace BotWorld2Core.Game.General
         }
         public void RotateLeft()
         {
-            if(X == 0)
+            if (X == 0)
             {
                 Y = -Y;
             }
-            else if(X == 1)
+            else if (X == 1)
             {
-                if(Y != 1)
+                if (Y != 1)
                     Y += 1;
                 else { X = 0; Y = 1; }
             }
-            else if(X == -1)
+            else if (X == -1)
             {
-                if(Y != -1)
+                if (Y != -1)
                     Y -= 1;
                 else { X = 0; Y = -1; }
             }
         }
         public void RotateRight()
         {
-            if(X == 0)
+            if (X == 0)
             {
                 X = Y;
             }
-            else if(X == 1)
+            else if (X == 1)
             {
-                if(Y != -1)
+                if (Y != -1)
                     Y -= 1;
                 else { X = 0; Y = -1; };
             }
-            else if(X == -1)
+            else if (X == -1)
             {
-                if(Y != 1)
+                if (Y != 1)
                     Y += 1;
                 else { X = 0; Y = 1; };
             }

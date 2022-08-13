@@ -1,7 +1,4 @@
 using BotWorld2Core.Game.General;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BotWorld2Core.Game.Ai
 {
@@ -29,7 +26,7 @@ namespace BotWorld2Core.Game.Ai
         public void SetNextLayer(NeuronLayer nextLayer)
         {
             var rnd = Global.Random;
-            _weights = new double[Length,nextLayer.Length];
+            _weights = new double[Length, nextLayer.Length];
             _nextLayer = nextLayer;
             for (int currentNeuron = 0; currentNeuron < Length; currentNeuron++)
             {
@@ -40,13 +37,13 @@ namespace BotWorld2Core.Game.Ai
             }
         }
 
-        public void AddNeuronInput(int neuron, double input) 
+        public void AddNeuronInput(int neuron, double input)
         {
             _neurons[neuron].AddInput(input);
         }
         public void SetLayerInput(double[] input)
         {
-            if(input.Length != Length)
+            if (input.Length != Length)
                 throw new ArgumentException();
 
             for (int i = 0; i < input.Length; i++)
@@ -60,12 +57,12 @@ namespace BotWorld2Core.Game.Ai
             var answer = new double[_nextLayer != null ? _nextLayer.Length : _neurons.Length];
             for (int current = 0; current < Length; current++)
             {
-                if(_nextLayer == null)
+                if (_nextLayer == null)
                 {
                     answer[current] = _neurons[current].Activate();
                     continue;
                 }
-                
+
                 for (int next = 0; next < _nextLayer.Length; next++)
                 {
                     var weight = _weights[current, next];
@@ -77,18 +74,18 @@ namespace BotWorld2Core.Game.Ai
         }
         public void Clear()
         {
-            foreach(var neuron in _neurons)
+            foreach (var neuron in _neurons)
                 neuron.Reset();
         }
         public double[,] ExportWeights() => _weights;
         public Type GetNeuronType(int neuron) => _neurons[neuron].GetType();
         public void ImportWeights(double[,] weights)
         {
-            if(_nextLayer == null)
+            if (_nextLayer == null)
                 return;
-            if(Length != weights.GetLength(0) || _nextLayer.Length != weights.GetLength(1))
+            if (Length != weights.GetLength(0) || _nextLayer.Length != weights.GetLength(1))
                 throw new ArgumentException();
             _weights = weights;
-        } 
+        }
     }
 }

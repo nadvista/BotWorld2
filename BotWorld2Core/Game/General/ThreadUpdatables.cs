@@ -16,7 +16,7 @@
         }
         public void Update()
         {
-            for(int i = 0; i < _updatables.Length; i++)
+            for (int i = 0; i < _updatables.Length; i++)
                 _updatables[i].Update();
         }
         public bool IsStopped() => _thread.ThreadState == ThreadState.Stopped;
