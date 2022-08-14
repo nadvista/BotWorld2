@@ -20,7 +20,7 @@
         #endregion
 
         #region Program
-        public const int ThreadsCount;
+        public const int ThreadsCount = 3;
         #endregion
     }
 }

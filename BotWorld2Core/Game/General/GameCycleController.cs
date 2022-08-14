@@ -6,14 +6,15 @@
         public void AddUpdatable(Updatable updatable)
         {
             _updatables.Add(updatable);
-            SetupThreads();
         }
 
         private ThreadUpdatables[] _threads = new ThreadUpdatables[GameSettings.ThreadsCount];
 
         public bool TryCallUpdate()
         {
-            if (!_threads.All(e => e.IsStopped())) return false;
+            SetupThreads();
+            if (!_threads.All(e => e == null || e.IsStopped())) 
+                return false;
             for (int i = 0; i < _threads.Length; i++)
             {
                 var thread = _threads[i];
@@ -25,7 +26,7 @@
         private void SetupThreads()
         {
             var updatablesPerThreadFloat = _updatables.Count / (float)GameSettings.ThreadsCount;
-            var updatablesPerThreadInt = (int)Math.Floor(updatablesPerThreadFloat);
+            var updatablesPerThreadInt = (int)Math.Ceiling(updatablesPerThreadFloat);
             var updatablesAdded = 0;
 
             for (int i = 0; i < GameSettings.ThreadsCount - 1; i++)
@@ -36,8 +37,12 @@
 
                 _threads[i] = threadUpdatables;
             }
-            var lastUpdatables = _updatables.GetRange(updatablesAdded - 1, _updatables.Count - updatablesAdded).ToArray();
-            _threads[^1] = new ThreadUpdatables(lastUpdatables);
+            if (updatablesAdded > 0)
+            {
+                var lastUpdatables = _updatables.GetRange(updatablesAdded - 1, _updatables.Count - updatablesAdded).ToArray();
+                _threads[^1] = new ThreadUpdatables(lastUpdatables);
+            }
+
         }
     }
 }
