@@ -40,7 +40,7 @@ namespace BotWorld2Core.Game.Bots
 
         private BotController _controller;
 
-        public BotModel(NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position)
+        public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position)
         {
             if (brain == null
                 || sensors == null || sensors.Any(e => e == null)
@@ -63,7 +63,7 @@ namespace BotWorld2Core.Game.Bots
             BindComponents(sensors);
             BindComponents(actions);
 
-            _controller = new BotController(this);
+            _controller = new BotController(cycleController, this);
         }
 
         private void BindComponents(BotComponent[] sensors)

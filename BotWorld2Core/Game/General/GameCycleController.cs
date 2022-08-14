@@ -3,16 +3,25 @@
     internal class GameCycleController
     {
         private List<Updatable> _updatables = new List<Updatable>();
+
+        private bool _setupRequired;
         public void AddUpdatable(Updatable updatable)
         {
             _updatables.Add(updatable);
+            _setupRequired = true;
+        }
+        public void RemoveUpdatable(Updatable updatable)
+        {
+            _updatables.Remove(updatable);
+            _setupRequired = true;
         }
 
         private ThreadUpdatables[] _threads = new ThreadUpdatables[GameSettings.ThreadsCount];
 
         public bool TryCallUpdate()
         {
-            SetupThreads();
+            if(_setupRequired)
+                SetupThreads();
             if (!_threads.All(e => e == null || e.IsStopped())) 
                 return false;
             for (int i = 0; i < _threads.Length; i++)
@@ -42,7 +51,7 @@
                 var lastUpdatables = _updatables.GetRange(updatablesAdded - 1, _updatables.Count - updatablesAdded).ToArray();
                 _threads[^1] = new ThreadUpdatables(lastUpdatables);
             }
-
+            _setupRequired = false;
         }
     }
 }

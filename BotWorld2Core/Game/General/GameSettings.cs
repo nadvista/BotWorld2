@@ -13,6 +13,8 @@
         public const float StartEnergy = 10;
 
         public const float MutationChance = .05f;
+
+        public const int StartBotsCount = 150;
         #endregion
 
         #region World

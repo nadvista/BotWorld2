@@ -6,7 +6,7 @@ namespace BotWorld2Core.Game.Bots
     {
         private BotModel _model;
 
-        public BotController(BotModel model) : base()
+        public BotController(GameCycleController cycle, BotModel model) : base(cycle)
         {
             _model = model;
         }

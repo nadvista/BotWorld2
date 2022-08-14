@@ -13,13 +13,17 @@ namespace BotWorld2Core.Game.Bots
             .GetTypes()
             .Where(e => typeof(Neuron).IsAssignableFrom(e))
             .ToArray();
+
         private Random _random = Global.Random;
+
+        private GameCycleController _cycleController;
         private WorldController _world;
-        public BotFabric(WorldController worldController)
+        public BotFabric(WorldController worldController, GameCycleController cycleController)
         {
             _world = worldController;
+            _cycleController = cycleController;
         }
-        public BotModel CreateRandom(int posX, int posY)
+        public BotModel CreateRandom(Vector2int position)
         {
             var layers = new NeuronLayer[2 + GameSettings.BotHiddenLayersCount];
             //создаем скрытые слои
@@ -38,7 +42,7 @@ namespace BotWorld2Core.Game.Bots
 
             var network = new NeuronNetwork(layers);
 
-            var bot = new BotModel(network, sensors, actions, new Vector2int(posX, posY));
+            var bot = new BotModel(_cycleController, network, sensors, actions, position);
             return bot;
         }
         public bool CreateChild(BotModel parent, out BotModel child)
