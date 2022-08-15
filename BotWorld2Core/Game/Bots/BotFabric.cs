@@ -18,10 +18,13 @@ namespace BotWorld2Core.Game.Bots
 
         private GameCycleController _cycleController;
         private WorldController _world;
-        public BotFabric(WorldController worldController, GameCycleController cycleController)
+        private GameManager _manager;
+
+        public BotFabric(WorldController worldController, GameCycleController cycleController, GameManager manager)
         {
             _world = worldController;
             _cycleController = cycleController;
+            _manager = manager;
         }
         public BotModel CreateRandom(Vector2int position)
         {
@@ -37,8 +40,8 @@ namespace BotWorld2Core.Game.Bots
             var sensors = CreateSensors();
             var actions = CreateActions();
 
-            layers[0] = new NeuronLayer(sensors.Length);
-            layers[1] = new NeuronLayer(actions.Length);
+            layers[0] = new NeuronLayer(sensors.Sum(e => e.GetDataSize()));
+            layers[^1] = new NeuronLayer(actions.Length);
 
             var network = new NeuronNetwork(layers);
 
@@ -107,7 +110,7 @@ namespace BotWorld2Core.Game.Bots
             var childBrainScheme = new NetworkCreationScheme(weights, neurons);
             var network = new NeuronNetwork(childBrainScheme);
 
-            child = new BotModel(network, sensors, actions, childPostion);
+            child = new BotModel(_cycleController, network, sensors, actions, childPostion);
             return true;
         }
 
@@ -115,14 +118,20 @@ namespace BotWorld2Core.Game.Bots
         {
             return new BotSensor[] {
                 new EyeSensor(_world),
-                new PositionRotationSensor()
+                new PositionRotationSensor(),
+                new BotParamsSensor()
             };
         }
 
         private BotAction[] CreateActions()
         {
             return new BotAction[] {
-                new MoveBotAction(_world)
+                new MoveBotAction(_world),
+                new RotateLeftBotAction(),
+                new RotateRigthBotAction(),
+                new EatBotAction(_world),
+                new GetEnergyBotAction(_world),
+                new CreateChildAction(this, _manager)
             };
         }
     }

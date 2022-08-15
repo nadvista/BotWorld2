@@ -4,7 +4,7 @@ namespace BotWorld2Core.Game.Bots.Actions
 {
     internal class MoveBotAction : BotAction
     {
-        private WorldController _world;
+        private readonly WorldController _world;
 
         public MoveBotAction(WorldController world)
         {

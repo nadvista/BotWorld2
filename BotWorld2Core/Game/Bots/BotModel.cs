@@ -13,7 +13,7 @@ namespace BotWorld2Core.Game.Bots
         public float Health
         {
             get => _health;
-            private set
+            set
             {
                 _health = Math.Clamp(value, 0f, MaxHealth);
                 if (_health == 0)
@@ -23,7 +23,7 @@ namespace BotWorld2Core.Game.Bots
         public float Energy
         {
             get => _energy;
-            private set
+            set
             {
                 _energy = Math.Clamp(value, 0f, MaxEnergy);
             }
@@ -46,7 +46,7 @@ namespace BotWorld2Core.Game.Bots
                 || sensors == null || sensors.Any(e => e == null)
                 || actions == null || actions.Any(e => e == null))
                 throw new ArgumentNullException();
-            if (brain.InputLayerLength != sensors.Length
+            if (brain.InputLayerLength != sensors.Sum(e => e.GetDataSize())
                 || brain.OutputLayerLength != actions.Length)
                 throw new ArgumentException();
 

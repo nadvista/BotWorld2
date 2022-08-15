@@ -6,8 +6,9 @@
         public Updatable(GameCycleController cycleController)
         {
             _gameCycleController = cycleController;
-            _gameCycleController.RemoveUpdatable(this);
+            _gameCycleController.AddUpdatable(this);
         }
         public abstract void Update();
+        protected void RemoveUpdatable() => _gameCycleController.RemoveUpdatable(this);
     }
 }
