@@ -36,7 +36,11 @@ namespace BotWorld2Core.Game.Ai
                 var layerNeurons = new Neuron[scheme.NeuronTypes[layerIndex].Length];
                 for (int neuronIndex = 0; neuronIndex < layerNeurons.Length; neuronIndex++)
                 {
+#pragma warning disable CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
+#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
                     layerNeurons[neuronIndex] = (Neuron)Activator.CreateInstance(scheme.NeuronTypes[layerIndex][neuronIndex]);
+#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
+#pragma warning restore CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
                 }
                 _layers[layerIndex] = new NeuronLayer(layerNeurons);
             }
@@ -75,7 +79,7 @@ namespace BotWorld2Core.Game.Ai
             }
             var output = _layers[^1].GetLayerOutput();
 
-            if (_memory.Count < MAX_MEMORY_LEN)
+            if (_memory.Count < MAX_MEMORY_LEN && !_memory.ContainsKey(key))
                 _memory.Add(key, (double[])output);
 
             return output;

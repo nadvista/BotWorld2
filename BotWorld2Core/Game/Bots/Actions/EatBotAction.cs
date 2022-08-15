@@ -1,10 +1,5 @@
 ﻿using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BotWorld2Core.Game.Bots.Actions
 {
@@ -19,8 +14,9 @@ namespace BotWorld2Core.Game.Bots.Actions
 
         public override void Execute()
         {
-            var targetCell = _world.GetCell(_self.Position + _self.Forward);
-            if(targetCell.HasBot)
+            var targetPos = _self.Position + _self.Forward;
+            var targetCell = _world.GetCell(targetPos);
+            if (targetCell.HasBot)
             {
                 var targetBot = targetCell.GetBot();
                 var bonusHealth = Math.Min(GameSettings.EatBotHealthBonus, targetBot.Health);
@@ -32,13 +28,13 @@ namespace BotWorld2Core.Game.Bots.Actions
                 _self.Health += bonusHealth;
                 _self.Energy += bonusEnergy;
             }
-            else if(targetCell.HasFood)
+            else if (_world.HasFood(targetPos))
             {
-                targetCell.TakeFood();
+                _world.TakeFood(targetPos);
                 _self.Health += GameSettings.EatFoodHealthBonus;
                 _self.Energy += GameSettings.EatFoodEnergyBonus;
             }
-            
+
         }
     }
 }

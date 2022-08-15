@@ -15,7 +15,11 @@ namespace BotWorld2Core.Game.World
 
         private BotModel _currentBot;
 
+#pragma warning disable CS8618 // событие "Updated", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить событие как допускающий значения NULL.
+#pragma warning disable CS8618 // поле "_currentBot", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
         public WorldCell(bool isWall, bool hasFood, float sunLevel, int x, int y)
+#pragma warning restore CS8618 // поле "_currentBot", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
+#pragma warning restore CS8618 // событие "Updated", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить событие как допускающий значения NULL.
         {
             IsWall = isWall;
             HasFood = hasFood;
@@ -26,49 +30,29 @@ namespace BotWorld2Core.Game.World
         public BotModel GetBot() => _currentBot;
         public void PlaceBot(BotModel model)
         {
-            object locker = new();
-            lock (locker)
-            {
-                _currentBot = model;
-                Updated?.Invoke(this);
-            }
+            _currentBot = model;
+            Updated?.Invoke(this);
         }
         public void RemoveBot()
         {
-            object locker = new();
-            lock (locker)
-            {
-                _currentBot = null;
-                Updated?.Invoke(this);
-            }
+            _currentBot = null;
+            Updated?.Invoke(this);
         }
         public void PlaceFood()
         {
-            object locker = new();
-            lock (locker)
-            {
-                HasFood = true;
-                Updated?.Invoke(this);
-            }
+            HasFood = true;
+            Updated?.Invoke(this);
         }
         public void TakeFood()
         {
-            object locker = new();
-            lock (locker)
-            {
-                HasFood = false;
-                Updated?.Invoke(this);
-            }
+            HasFood = false;
+            Updated?.Invoke(this);
         }
         public void Reset()
         {
-            object locker = new();
-            lock (locker)
-            {
-                _currentBot = null;
-                HasFood = false;
-                Updated?.Invoke(this);
-            }
+            _currentBot = null;
+            HasFood = false;
+            Updated?.Invoke(this);
         }
     }
 }

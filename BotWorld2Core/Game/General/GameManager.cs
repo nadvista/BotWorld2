@@ -7,7 +7,7 @@ namespace BotWorld2Core.Game.General
     internal class GameManager
     {
         public event Action<WorldCell> OnCellUpdated;
-        
+
         public int Step { get; private set; }
         public int BotsAlive => _bots.Count;
 
@@ -21,7 +21,7 @@ namespace BotWorld2Core.Game.General
 
         public GameManager()
         {
-            _worldController = new WorldController(new IslandCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
+            _worldController = new WorldController(new RandomCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
             _gameCycleController = new GameCycleController();
             _fabric = new BotFabric(_worldController, _gameCycleController, this);
 
@@ -31,21 +31,19 @@ namespace BotWorld2Core.Game.General
         }
         public void Update()
         {
+            _gameCycleController.Update();
+
             Step++;
-            _gameCycleController.TryCallUpdate();
             _worldController.PlaceFood();
 
-            foreach(var bot in _dead)
+            foreach (var bot in _dead)
             {
                 _bots.Remove(bot);
-                bot.OnDead -= BotDead;
             }
-            foreach(var bot in _born)
+            foreach (var bot in _born)
             {
                 _bots.Add(bot);
-                bot.OnDead += BotDead;
-                _worldController.GetCell(bot.Position).PlaceBot(bot);
-            }    
+            }
 
             _dead.Clear();
             _born.Clear();
@@ -53,6 +51,7 @@ namespace BotWorld2Core.Game.General
         public void AddBot(BotModel model)
         {
             _born.Add(model);
+            model.OnDead += BotDead;
         }
 
         private void CreateBots()
@@ -68,16 +67,24 @@ namespace BotWorld2Core.Game.General
                 } while (!_worldController.GetCell(new Vector2int(x, y)).CanStayHere);
                 //creating bot
                 var bot = _fabric.CreateRandom(new Vector2int(x, y));
-                _worldController.GetCell(bot.Position).PlaceBot(bot);
-                _bots.Add(bot);
-                bot.OnDead += BotDead;
+                AddBot(bot);
             }
         }
         public WorldCell GetCell(Vector2int cellPos) => _worldController.GetCell(cellPos);
+        public void Reset()
+        {
+            _bots.Clear();
+            _born.Clear();
+            _dead.Clear();
+            _worldController.Reset();
+            Step = 0;
+            CreateBots();
+        }
         private void BotDead(BotModel model)
         {
-            _worldController.GetCell(model.Position).RemoveBot();
             _dead.Add(model);
+            model.OnDead -= BotDead;
+            _worldController.GetCell(model.Position).RemoveBot();
         }
     }
 }

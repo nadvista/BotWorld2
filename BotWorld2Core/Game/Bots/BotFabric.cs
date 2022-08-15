@@ -45,7 +45,8 @@ namespace BotWorld2Core.Game.Bots
 
             var network = new NeuronNetwork(layers);
 
-            var bot = new BotModel(_cycleController, network, sensors, actions, position);
+            var bot = new BotModel(_cycleController, network, sensors, actions, position, _manager.Step);
+            _world.GetCell(position).PlaceBot(bot);
             return bot;
         }
         public bool CreateChild(BotModel parent, out BotModel child)
@@ -110,7 +111,8 @@ namespace BotWorld2Core.Game.Bots
             var childBrainScheme = new NetworkCreationScheme(weights, neurons);
             var network = new NeuronNetwork(childBrainScheme);
 
-            child = new BotModel(_cycleController, network, sensors, actions, childPostion);
+            child = new BotModel(_cycleController, network, sensors, actions, childPostion, _manager.Step);
+            _world.GetCell(childPostion).PlaceBot(child);
             return true;
         }
 

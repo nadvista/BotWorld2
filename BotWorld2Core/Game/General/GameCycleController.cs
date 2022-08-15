@@ -2,42 +2,31 @@
 {
     internal class GameCycleController
     {
-        private ThreadUpdatables[] _threads = new ThreadUpdatables[GameSettings.ThreadsCount];
+        private List<Updatable> _updatables = new List<Updatable>();
+        private List<Updatable> _toRemove = new List<Updatable>();
+        private List<Updatable> _toAdd = new List<Updatable>();
 
-        public GameCycleController()
-        {
-            _threads = new ThreadUpdatables[GameSettings.ThreadsCount];
-            for(int i = 0; i < _threads.Length; i++)
-            {
-                _threads[i] = new ThreadUpdatables();
-            }
-        }
+
         public void AddUpdatable(Updatable updatable)
         {
-            var thread = _threads.Min();
-            thread.Add(updatable);
+            _toAdd.Add(updatable);
         }
 
         public void RemoveUpdatable(Updatable updatable)
         {
-            var thread = _threads.First(e => e.Contains(updatable));
-            thread.Remove(updatable);
+            _toRemove.Add(updatable);
         }
 
-        public bool TryCallUpdate()
+        public void Update()
         {
-            if (!_threads.All(e => e == null || e.IsStopped())) 
-                return false;
-            for (int i = 0; i < _threads.Length; i++)
-            {
-                var thread = _threads[i];
-                thread.Update();
-            }
-            return true;
-        }
-
-        private void SetupThreads()
-        {
+            Parallel.ForEach(_updatables, e => e.Update());
+            //_updatables.ForEach(e => e.Update());
+            foreach (var remove in _toRemove)
+                _updatables.Remove(remove);
+            _toRemove.Clear();
+            foreach (var add in _toAdd)
+                _updatables.Add(add);
+            _toAdd.Clear();
         }
     }
 }

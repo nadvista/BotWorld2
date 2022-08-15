@@ -10,7 +10,11 @@ namespace BotWorld2Core.Game.Ai
         private double[,] _weights;
         private NeuronLayer _nextLayer;
 
+#pragma warning disable CS8618 // поле "_nextLayer", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
+#pragma warning disable CS8618 // поле "_weights", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
         public NeuronLayer(int neuronCount)
+#pragma warning restore CS8618 // поле "_weights", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
+#pragma warning restore CS8618 // поле "_nextLayer", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
         {
             _neurons = new Neuron[neuronCount];
             for (int i = 0; i < neuronCount; i++)
@@ -18,7 +22,11 @@ namespace BotWorld2Core.Game.Ai
                 _neurons[i] = new Neuron();
             }
         }
+#pragma warning disable CS8618 // поле "_nextLayer", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
+#pragma warning disable CS8618 // поле "_weights", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
         public NeuronLayer(params Neuron[] neurons)
+#pragma warning restore CS8618 // поле "_weights", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
+#pragma warning restore CS8618 // поле "_nextLayer", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
         {
             _neurons = neurons;
         }

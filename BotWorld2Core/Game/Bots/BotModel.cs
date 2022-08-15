@@ -10,6 +10,8 @@ namespace BotWorld2Core.Game.Bots
         public event Action<BotModel> OnDead;
         public float MaxHealth => GameSettings.MaxHealth;
         public float MaxEnergy => GameSettings.MaxEnergy;
+        public int Age { get; set; }
+        public readonly int Birthday;
         public float Health
         {
             get => _health;
@@ -40,7 +42,7 @@ namespace BotWorld2Core.Game.Bots
 
         private BotController _controller;
 
-        public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position)
+        public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position, int birthday = 0)
         {
             if (brain == null
                 || sensors == null || sensors.Any(e => e == null)
@@ -53,6 +55,7 @@ namespace BotWorld2Core.Game.Bots
             Brain = brain;
             Sensors = sensors;
             Actions = actions;
+            Birthday = birthday;
 
             _health = GameSettings.StartHealth;
             _energy = GameSettings.StartEnergy;
@@ -64,6 +67,7 @@ namespace BotWorld2Core.Game.Bots
             BindComponents(actions);
 
             _controller = new BotController(cycleController, this);
+            
         }
 
         private void BindComponents(BotComponent[] sensors)

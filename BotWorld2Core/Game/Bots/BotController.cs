@@ -4,6 +4,8 @@ namespace BotWorld2Core.Game.Bots
 {
     internal class BotController : Updatable
     {
+        private static object locker = new();
+       
         private BotModel _model;
 
         public BotController(GameCycleController cycle, BotModel model) : base(cycle)
@@ -18,10 +20,15 @@ namespace BotWorld2Core.Game.Bots
             var answer = GetBrainAnswer(datas);
 
             var commandIndex = Array.IndexOf(answer, answer.Max());
-            _model.Actions[commandIndex].Execute();
+            lock (locker)
+            {
+                _model.Actions[commandIndex].Execute();
 
-            _model.Health--;
-            //безопасно, т.к при создании модели происходит проверка совпадения длины выходного уровня НС и кол-ва  Actions
+
+                _model.Health--;
+                //безопасно, т.к при создании модели происходит проверка совпадения длины выходного уровня НС и кол-ва  Actions
+                _model.Age++;
+            }
 
         }
         private double[] GetBrainAnswer(double[] inputs) => _model.Brain.Calculate(inputs);
