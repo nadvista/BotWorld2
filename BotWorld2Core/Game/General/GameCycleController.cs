@@ -19,8 +19,14 @@
 
         public void Update()
         {
-            Parallel.ForEach(_updatables, e => e.Update());
-            //_updatables.ForEach(e => e.Update());
+            foreach (var updatable in _updatables)
+            {
+                var updatableArgument = updatable;
+                var task = Task.Run(() => updatableArgument.ThreadUpdate());
+            }
+            Task.WaitAll();
+            _updatables.ForEach(e => e.Update()); //360.8
+
             foreach (var remove in _toRemove)
                 _updatables.Remove(remove);
             _toRemove.Clear();

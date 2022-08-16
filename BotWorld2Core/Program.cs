@@ -44,14 +44,14 @@ namespace BotWorld2Core
                             _outputMode--;
                             if(_outputMode == -1)
                             {
-                                _outputMode = 3;
+                                _outputMode = 4;
                             }
                             _manager.OnCellUpdated -= RedrawCell;
                             RedrawAll();
                             break;
                         case ConsoleKey.UpArrow:
                             _outputMode++;
-                            if (_outputMode == 4)
+                            if (_outputMode == 5)
                             {
                                 _outputMode = 0;
                             }
@@ -77,13 +77,15 @@ namespace BotWorld2Core
             Console.WriteLine($"Current step {_manager.Step}--------------------------------------");
             Console.WriteLine($"BotsAlive {_manager.BotsAlive}--------------------------------------");
             if (_outputMode == 0)
-                Console.WriteLine("Output: Energy map");
+                Console.WriteLine("Output: Energy map--------------------------------");
             else if (_outputMode == 1)
-                Console.WriteLine("Output: Standart map");
+                Console.WriteLine("Output: Standart map--------------------------------");
             else if (_outputMode == 2)
-                Console.WriteLine("Output: Age map");
+                Console.WriteLine("Output: Age map--------------------------------");
             else if (_outputMode == 3)
-                Console.WriteLine("Output: Health map");
+                Console.WriteLine("Output: Health map--------------------------------");
+            else if (_outputMode == 4)
+                Console.WriteLine("Output: Agressive map--------------------------------");
         }
         private static void RedrawAll()
         {
@@ -98,6 +100,7 @@ namespace BotWorld2Core
         private static void RedrawCell(WorldCell cell) => RedrawCell(new Vector2int(cell.X, cell.Y));
         private static void RedrawCell(Vector2int cellPos)
         {
+            Console.ResetColor();
             if (!_showOutput) return;
             Console.SetCursorPosition(cellPos.X, cellPos.Y);
             var cell = _manager.GetCell(cellPos);
@@ -117,13 +120,20 @@ namespace BotWorld2Core
             {
                 DrawHealth(cell);
             }
+            else if(_outputMode == 4)
+            {
+                DrawAgressive(cell);
+            }
             Console.ResetColor();
         }
 
         private static void DrawHealth(WorldCell cell)
         {
             if (!cell.HasBot)
+            {
+                Console.Write(' ');
                 return;
+            }
             var health = cell.GetBot().Health;
             ConsoleColor color = ConsoleColor.White;
 
@@ -142,24 +152,53 @@ namespace BotWorld2Core
             Console.ForegroundColor = color;
             Console.Write('B');
         }
+        private static void DrawAgressive(WorldCell cell)
+        {
+            if (!cell.HasBot)
+            {
+                Console.Write(' ');
+                return;
+            }
+            var aggr = cell.GetBot().BotAte;
+            ConsoleColor color = ConsoleColor.White;
+
+            if (aggr < 1)
+                color = ConsoleColor.DarkBlue;
+            else if (aggr < 3)
+                color = ConsoleColor.Blue;
+            else if (aggr < 5)
+                color = ConsoleColor.Yellow;
+            else if (aggr < 7)
+                color = ConsoleColor.Red;
+            else if (aggr < 9)
+                color = ConsoleColor.DarkRed;
+            else if (aggr > 11)
+                color = ConsoleColor.Yellow;
+            Console.ForegroundColor = color;
+            Console.Write('B');
+        }
         private static void DrawAge(WorldCell cell)
         {
             if (!cell.HasBot)
+            {
+                Console.Write(' ');
                 return;
+            }
+
             var botAge = cell.GetBot().Age;
             ConsoleColor color = ConsoleColor.White;
 
-            if (botAge < 100)
+            if (botAge < 50)
                 color = ConsoleColor.DarkBlue;
-            else if (botAge < 200)
+            else if (botAge < 70)
                 color = ConsoleColor.Blue;
-            else if (botAge < 300)
+            else if (botAge < 120)
                 color = ConsoleColor.Yellow;
-            else if (botAge < 500)
+            else if (botAge < 160)
                 color = ConsoleColor.Red;
-            else if (botAge < 700)
+            else if (botAge < 200)
                 color = ConsoleColor.DarkRed;
-            else if (botAge > 1000)
+            else if (botAge > 400)
                 color = ConsoleColor.Green;
             Console.ForegroundColor = color;
             Console.Write('B');
@@ -188,17 +227,18 @@ namespace BotWorld2Core
         private static void DrawEnergy(WorldCell cell)
         {
             ConsoleColor color;
-            if (cell.SunLevel < .1)
+            var level = cell.SunLevel * GameSettings.SunShare;
+            if (level < .1)
                 color = ConsoleColor.DarkBlue;
-            else if (cell.SunLevel < .4)
+            else if (level < .4)
                 color = ConsoleColor.Blue;
-            else if (cell.SunLevel < .8)
+            else if (level < .8)
                 color = ConsoleColor.Yellow;
-            else if (cell.SunLevel < 1.2)
+            else if (level < 1.2)
                 color = ConsoleColor.Red;
-            else if (cell.SunLevel < 1.8)
+            else if (level < 1.8)
                 color = ConsoleColor.DarkRed;
-            else if (cell.SunLevel > 8)
+            else if (level > 8)
                 color = ConsoleColor.Green;
             else color = ConsoleColor.White;
             Console.ForegroundColor = color;

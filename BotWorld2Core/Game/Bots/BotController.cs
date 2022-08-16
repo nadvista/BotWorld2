@@ -1,10 +1,12 @@
-﻿using BotWorld2Core.Game.General;
+﻿using BotWorld2Core.Game.Bots.Actions;
+using BotWorld2Core.Game.General;
 
 namespace BotWorld2Core.Game.Bots
 {
     internal class BotController : Updatable
     {
-        private static object locker = new();
+        private BotAction _lastAction;
+        private bool _lastActionExecuted;
        
         private BotModel _model;
 
@@ -14,28 +16,37 @@ namespace BotWorld2Core.Game.Bots
             _model.OnDead += OnDeadHandler;
         }
 
-        public override void Update()
+        public override void ThreadUpdate()
         {
+            _lastActionExecuted = false;
+
             var datas = GetSensorsData();
             var answer = GetBrainAnswer(datas);
 
-            var commandIndex = Array.IndexOf(answer, answer.Max());
-            lock (locker)
+            var index = Array.IndexOf(answer, answer.Max());
+            _lastAction = _model.Actions[index];
+
+            if(!_lastAction.StopThread)
             {
-                _model.Actions[commandIndex].Execute();
-
-
-                _model.Health--;
-                //безопасно, т.к при создании модели происходит проверка совпадения длины выходного уровня НС и кол-ва  Actions
-                _model.Age++;
-            }
-
+                _lastAction.Execute();
+                _lastActionExecuted = true;
+            }    
         }
         private double[] GetBrainAnswer(double[] inputs) => _model.Brain.Calculate(inputs);
         private double[] GetSensorsData() => _model.Sensors.SelectMany(e => e.GetData()).ToArray();
         public void OnDeadHandler(BotModel model)
         {
             RemoveUpdatable();
+        }
+
+        public override void Update()
+        {
+            if (!_lastActionExecuted)
+                _lastAction.Execute();
+
+            //безопасно, т.к при создании модели происходит проверка совпадения длины выходного уровня НС и кол-ва  Actions
+            _model.Health--;
+            _model.Age++;
         }
     }
 }

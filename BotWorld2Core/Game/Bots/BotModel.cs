@@ -11,6 +11,7 @@ namespace BotWorld2Core.Game.Bots
         public float MaxHealth => GameSettings.MaxHealth;
         public float MaxEnergy => GameSettings.MaxEnergy;
         public int Age { get; set; }
+        public int BotAte { get; set; }
         public readonly int Birthday;
         public float Health
         {
