@@ -3,9 +3,17 @@
     internal abstract class Updatable
     {
         protected GameCycleController _gameCycleController;
-        public Updatable(GameCycleController cycleController)
+        public Updatable()
+        { }
+        public Updatable(GameCycleController cycleController) : base()
         {
-            _gameCycleController = cycleController;
+            SetCycleController(cycleController);
+        }
+        public void SetCycleController(GameCycleController newController)
+        {
+            if (_gameCycleController != null)
+                RemoveUpdatable();
+            _gameCycleController = newController;
             _gameCycleController.AddUpdatable(this);
         }
         public abstract void ThreadUpdate();

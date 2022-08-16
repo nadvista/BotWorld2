@@ -1,4 +1,5 @@
 ﻿using BotWorld2Core.Game.Bots;
+using BotWorld2Core.Game.Scripts;
 using BotWorld2Core.Game.World;
 using BotWorld2Core.Game.World.Schemes;
 
@@ -19,14 +20,15 @@ namespace BotWorld2Core.Game.General
         private List<BotModel> _born = new List<BotModel>();
         private List<BotModel> _dead = new List<BotModel>();
 
+        private List<Updatable> _scripts = new List<Updatable>();
+
         public GameManager()
         {
-            _worldController = new WorldController(new RandomCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
+            _worldController = new WorldController(new IslandCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
             _gameCycleController = new GameCycleController();
             _fabric = new BotFabric(_worldController, _gameCycleController, this);
 
             _worldController.CellUpdated += e => OnCellUpdated?.Invoke(e);
-
             CreateBots();
         }
         public void Update()
@@ -47,6 +49,11 @@ namespace BotWorld2Core.Game.General
 
             _dead.Clear();
             _born.Clear();
+        }
+        public void AddScript(Updatable script)
+        {
+            script.SetCycleController(_gameCycleController);
+            _scripts.Add(script);
         }
         public void AddBot(BotModel model)
         {
