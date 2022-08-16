@@ -44,14 +44,16 @@ namespace BotWorld2Core.Game.Bots
             layers[^1] = new NeuronLayer(actions.Length);
 
             var network = new NeuronNetwork(layers);
+            var color = Global.Random.Next(GameSettings.BotColorsCount);
 
-            var bot = new BotModel(_cycleController, network, sensors, actions, position, _manager.Step);
+            var bot = new BotModel(_cycleController, network, sensors, actions, position, _manager.Step,color);
             _world.GetCell(position).PlaceBot(bot);
             return bot;
         }
         public bool CreateChild(BotModel parent, out BotModel child)
         {
             var parentBrainScheme = parent.Brain.GetScheme();
+
             //find child position
             var offset = parent.Forward;
             var parentPosition = parent.Position;
@@ -72,6 +74,7 @@ namespace BotWorld2Core.Game.Bots
                 return false;
             }
             var childPostion = parent.Position + offset;
+
             //mutate child weights
             var weights = new double[parentBrainScheme.Weights.Length][,];
             for (int layer = 0; layer < parentBrainScheme.Weights.Length - 1; layer++)
@@ -111,7 +114,13 @@ namespace BotWorld2Core.Game.Bots
             var childBrainScheme = new NetworkCreationScheme(weights, neurons);
             var network = new NeuronNetwork(childBrainScheme);
 
-            child = new BotModel(_cycleController, network, sensors, actions, childPostion, _manager.Step);
+            var color = parent.Color + Global.Random.NextDouble() <= GameSettings.MutationChance? 1:0 * Global.Random.Next(0,2) == 0? -1:1;
+            if (color < 0) 
+                color = 0;
+            else if (color >= GameSettings.BotColorsCount) 
+                color = GameSettings.BotColorsCount - 1;
+
+            child = new BotModel(_cycleController, network, sensors, actions, childPostion, _manager.Step, color);
             _world.GetCell(childPostion).PlaceBot(child);
             return true;
         }

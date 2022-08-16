@@ -5,16 +5,19 @@ namespace BotWorld2Core
 {
     public class Program
     {
-#pragma warning disable CS8618 // поле "_manager", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
-        private static GameManager _manager;
-#pragma warning restore CS8618 // поле "_manager", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
-        private static int _outputMode;
+        private static GameManager _manager = new GameManager();
+
+        private static List<GameDrawer> _drawers = new List<GameDrawer>();
+        private static GameDrawer _currentDrawer => _drawers[_currentDrawerIndex];
+        private static int _currentDrawerIndex;
+
+        private static Dictionary<ConsoleKeyInfo, Action> _handlers = new Dictionary<ConsoleKeyInfo, Action>();
+
         private static bool _showOutput = true;
         private static bool _pause = false;
 
         public static void Main()
         {
-            _manager = new GameManager();
             _manager.OnCellUpdated += RedrawCell;
             Console.SetWindowSize(1, 1);
             Console.SetBufferSize(480, 65);
@@ -23,51 +26,55 @@ namespace BotWorld2Core
             RedrawAll();
             while (true)
             {
-                if (!_pause)
-                {
-                    _manager.Update();
-                    WriteInfo();
-
-                    if (_manager.BotsAlive < 4)
-                    {
-                        _manager.Reset();
-                        RedrawAll();
-                    }
-                }
-
                 if (Console.KeyAvailable)
                 {
-                    var keyPressed = Console.ReadKey(true);
-                    switch (keyPressed.Key)
-                    {
-                        case ConsoleKey.DownArrow:
-                            _outputMode--;
-                            if(_outputMode == -1)
-                            {
-                                _outputMode = 4;
-                            }
-                            _manager.OnCellUpdated -= RedrawCell;
-                            RedrawAll();
-                            break;
-                        case ConsoleKey.UpArrow:
-                            _outputMode++;
-                            if (_outputMode == 5)
-                            {
-                                _outputMode = 0;
-                            }
-                            _manager.OnCellUpdated += RedrawCell;
-                            RedrawAll();
-                            break;
-                        case ConsoleKey.Q:
-                            _showOutput = !_showOutput;
-                            if (_showOutput) RedrawAll();
-                            break;
-                        case ConsoleKey.P:
-                            _pause = !_pause;
-                            break;
-                    }
+                    var key = Console.ReadKey(true);
+                    if (_handlers.ContainsKey(key))
+                        _handlers[key].Invoke();
+                }
+
+                if (_pause)
+                {
+                    return;
+                }
+                _manager.Update();
+                WriteInfo();
+
+                if (_manager.BotsAlive < 4)
+                {
+                    _manager.Reset();
+                    RedrawAll();
                 }
             }
+        }
+        private static void SelectNextDrawer()
+        {
+            _currentDrawerIndex++;
+            if (_currentDrawerIndex == _drawers.Count)
+            {
+                _currentDrawerIndex = 0;
+            }
+            _manager.OnCellUpdated += RedrawCell;
+            RedrawAll();
+        }
+        private static void SelectPreviousDrawer()
+        {
+            _currentDrawerIndex--;
+            if (_currentDrawerIndex == -1)
+            {
+                _currentDrawerIndex = _drawers.Count - 1;
+            }
+            _manager.OnCellUpdated += RedrawCell;
+            RedrawAll();
+        }
+        private static void SwitchOutputMode()
+        {
+            _showOutput = !_showOutput;
+            if (_showOutput) RedrawAll();
+        }
+        private static void SwitchPause()
+        {
+            _pause = !_pause;
         }
 
         private static void WriteInfo()
@@ -76,16 +83,7 @@ namespace BotWorld2Core
 
             Console.WriteLine($"Current step {_manager.Step}--------------------------------------");
             Console.WriteLine($"BotsAlive {_manager.BotsAlive}--------------------------------------");
-            if (_outputMode == 0)
-                Console.WriteLine("Output: Energy map--------------------------------");
-            else if (_outputMode == 1)
-                Console.WriteLine("Output: Standart map--------------------------------");
-            else if (_outputMode == 2)
-                Console.WriteLine("Output: Age map--------------------------------");
-            else if (_outputMode == 3)
-                Console.WriteLine("Output: Health map--------------------------------");
-            else if (_outputMode == 4)
-                Console.WriteLine("Output: Agressive map--------------------------------");
+            Console.WriteLine(_currentDrawer.DrawerName);
         }
         private static void RedrawAll()
         {
@@ -97,152 +95,19 @@ namespace BotWorld2Core
                 }
             }
         }
-        private static void RedrawCell(WorldCell cell) => RedrawCell(new Vector2int(cell.X, cell.Y));
-        private static void RedrawCell(Vector2int cellPos)
+        private static void RedrawCell(WorldCell cell)
         {
             Console.ResetColor();
             if (!_showOutput) return;
-            Console.SetCursorPosition(cellPos.X, cellPos.Y);
-            var cell = _manager.GetCell(cellPos);
-            if (_outputMode == 0)
-            {
-                DrawEnergy(cell);
-            }
-            else if (_outputMode == 1)
-            {
-                DrawStandart(cell);
-            }
-            else if(_outputMode == 2)
-            {
-                DrawAge(cell);
-            }
-            else if(_outputMode == 3)
-            {
-                DrawHealth(cell);
-            }
-            else if(_outputMode == 4)
-            {
-                DrawAgressive(cell);
-            }
+            Console.SetCursorPosition(cell.X, cell.Y);
+            _currentDrawer.Draw(cell);
             Console.ResetColor();
         }
-
-        private static void DrawHealth(WorldCell cell)
+        private static void RedrawCell(Vector2int cellPos)
         {
-            if (!cell.HasBot)
-            {
-                Console.Write(' ');
-                return;
-            }
-            var health = cell.GetBot().Health;
-            ConsoleColor color = ConsoleColor.White;
-
-            if (health < 50)
-                color = ConsoleColor.DarkBlue;
-            else if (health < 70)
-                color = ConsoleColor.Blue;
-            else if (health < 100)
-                color = ConsoleColor.Yellow;
-            else if (health < 150)
-                color = ConsoleColor.Red;
-            else if (health < 300)
-                color = ConsoleColor.DarkRed;
-            else if (health > 500)
-                color = ConsoleColor.Green;
-            Console.ForegroundColor = color;
-            Console.Write('B');
-        }
-        private static void DrawAgressive(WorldCell cell)
-        {
-            if (!cell.HasBot)
-            {
-                Console.Write(' ');
-                return;
-            }
-            var aggr = cell.GetBot().BotAte;
-            ConsoleColor color = ConsoleColor.White;
-
-            if (aggr < 1)
-                color = ConsoleColor.DarkBlue;
-            else if (aggr < 3)
-                color = ConsoleColor.Blue;
-            else if (aggr < 5)
-                color = ConsoleColor.Yellow;
-            else if (aggr < 7)
-                color = ConsoleColor.Red;
-            else if (aggr < 9)
-                color = ConsoleColor.DarkRed;
-            else if (aggr > 11)
-                color = ConsoleColor.Yellow;
-            Console.ForegroundColor = color;
-            Console.Write('B');
-        }
-        private static void DrawAge(WorldCell cell)
-        {
-            if (!cell.HasBot)
-            {
-                Console.Write(' ');
-                return;
-            }
-
-            var botAge = cell.GetBot().Age;
-            ConsoleColor color = ConsoleColor.White;
-
-            if (botAge < 50)
-                color = ConsoleColor.DarkBlue;
-            else if (botAge < 70)
-                color = ConsoleColor.Blue;
-            else if (botAge < 120)
-                color = ConsoleColor.Yellow;
-            else if (botAge < 160)
-                color = ConsoleColor.Red;
-            else if (botAge < 200)
-                color = ConsoleColor.DarkRed;
-            else if (botAge > 400)
-                color = ConsoleColor.Green;
-            Console.ForegroundColor = color;
-            Console.Write('B');
-
-        }
-        private static void DrawStandart(WorldCell cell)
-        {
-            if (cell.IsWall)
-            {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write('#');
-            }
-            else if (cell.HasBot)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write('B');
-            }
-            else if (cell.HasFood)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write('B');
-            }
-            else Console.Write(' ');
+            var cell = _manager.GetCell(cellPos);
+            RedrawCell(cell);
         }
 
-        private static void DrawEnergy(WorldCell cell)
-        {
-            ConsoleColor color;
-            var level = cell.SunLevel * GameSettings.SunShare;
-            if (level < .1)
-                color = ConsoleColor.DarkBlue;
-            else if (level < .4)
-                color = ConsoleColor.Blue;
-            else if (level < .8)
-                color = ConsoleColor.Yellow;
-            else if (level < 1.2)
-                color = ConsoleColor.Red;
-            else if (level < 1.8)
-                color = ConsoleColor.DarkRed;
-            else if (level > 8)
-                color = ConsoleColor.Green;
-            else color = ConsoleColor.White;
-            Console.ForegroundColor = color;
-            Console.Write('#');
-        }
     }
 }

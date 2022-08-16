@@ -11,6 +11,7 @@
 
         public const float MaxEnergy = 40;
         public const float StartEnergy = 0;
+        public const int BotColorsCount = 10;
         #endregion
 
         #region World

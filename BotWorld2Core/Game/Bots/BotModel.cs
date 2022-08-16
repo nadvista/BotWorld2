@@ -13,6 +13,7 @@ namespace BotWorld2Core.Game.Bots
         public int Age { get; set; }
         public int BotAte { get; set; }
         public readonly int Birthday;
+        public readonly int Color;
         public float Health
         {
             get => _health;
@@ -43,7 +44,7 @@ namespace BotWorld2Core.Game.Bots
 
         private BotController _controller;
 
-        public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position, int birthday = 0)
+        public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position, int birthday = 0, int color = 0)
         {
             if (brain == null
                 || sensors == null || sensors.Any(e => e == null)
@@ -68,7 +69,7 @@ namespace BotWorld2Core.Game.Bots
             BindComponents(actions);
 
             _controller = new BotController(cycleController, this);
-            
+            Color = color;
         }
 
         private void BindComponents(BotComponent[] sensors)
