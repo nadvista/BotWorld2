@@ -12,6 +12,7 @@ namespace BotWorld2Core.Game.Scripts
         public Script() : base() { }
         public Script(GameCycleController controller) : base(controller)
         { }
+
         public abstract void Reset();
     }
 }

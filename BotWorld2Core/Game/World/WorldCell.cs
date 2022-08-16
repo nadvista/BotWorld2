@@ -15,11 +15,7 @@ namespace BotWorld2Core.Game.World
 
         private BotModel _currentBot;
 
-#pragma warning disable CS8618 // событие "Updated", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить событие как допускающий значения NULL.
-#pragma warning disable CS8618 // поле "_currentBot", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
         public WorldCell(bool isWall, bool hasFood, float sunLevel, int x, int y)
-#pragma warning restore CS8618 // поле "_currentBot", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающий значения NULL.
-#pragma warning restore CS8618 // событие "Updated", не допускающий значения NULL, должен содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить событие как допускающий значения NULL.
         {
             IsWall = isWall;
             HasFood = hasFood;
@@ -27,6 +23,7 @@ namespace BotWorld2Core.Game.World
             X = x;
             Y = y;
         }
+
         public BotModel GetBot() => _currentBot;
         public void PlaceBot(BotModel model)
         {

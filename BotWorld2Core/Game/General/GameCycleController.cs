@@ -6,17 +6,14 @@
         private List<Updatable> _toRemove = new List<Updatable>();
         private List<Updatable> _toAdd = new List<Updatable>();
 
-
         public void AddUpdatable(Updatable updatable)
         {
             _toAdd.Add(updatable);
         }
-
         public void RemoveUpdatable(Updatable updatable)
         {
             _toRemove.Add(updatable);
         }
-
         public void Update()
         {
             foreach (var updatable in _updatables)

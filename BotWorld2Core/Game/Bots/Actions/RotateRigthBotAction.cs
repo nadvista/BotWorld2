@@ -2,7 +2,8 @@
 {
     internal class RotateRigthBotAction : BotAction
     {
-        public override bool StopThread => false;
+        public override bool FreezeThread => false;
+
         public override void Execute()
         {
             _self.Forward.RotateRight();

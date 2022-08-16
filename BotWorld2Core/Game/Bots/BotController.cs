@@ -7,7 +7,6 @@ namespace BotWorld2Core.Game.Bots
     {
         private BotAction _lastAction;
         private bool _lastActionExecuted;
-       
         private BotModel _model;
 
         public BotController(GameCycleController cycle, BotModel model) : base(cycle)
@@ -26,19 +25,16 @@ namespace BotWorld2Core.Game.Bots
             var index = Array.IndexOf(answer, answer.Max());
             _lastAction = _model.Actions[index];
 
-            if(!_lastAction.StopThread)
+            if(!_lastAction.FreezeThread)
             {
                 _lastAction.Execute();
                 _lastActionExecuted = true;
             }    
         }
-        private double[] GetBrainAnswer(double[] inputs) => _model.Brain.Calculate(inputs);
-        private double[] GetSensorsData() => _model.Sensors.SelectMany(e => e.GetData()).ToArray();
         public void OnDeadHandler(BotModel model)
         {
             RemoveUpdatable();
         }
-
         public override void Update()
         {
             if (!_lastActionExecuted)
@@ -48,5 +44,8 @@ namespace BotWorld2Core.Game.Bots
             _model.Health--;
             _model.Age++;
         }
+
+        private double[] GetBrainAnswer(double[] inputs) => _model.Brain.Calculate(inputs);
+        private double[] GetSensorsData() => _model.Sensors.SelectMany(e => e.GetData()).ToArray();
     }
 }

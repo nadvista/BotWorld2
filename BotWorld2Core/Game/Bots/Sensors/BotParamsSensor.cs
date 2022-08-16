@@ -8,7 +8,6 @@ namespace BotWorld2Core.Game.Bots.Sensors
         {
             return new double[] { _self.Health / GameSettings.MaxHealth, _self.Energy / GameSettings.MaxEnergy };
         }
-
         public override int GetDataSize()
         {
             return 2;

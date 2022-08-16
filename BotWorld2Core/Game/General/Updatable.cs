@@ -3,6 +3,7 @@
     internal abstract class Updatable
     {
         protected GameCycleController _gameCycleController;
+
         public Updatable()
         { }
         public Updatable(GameCycleController cycleController) : base()
@@ -18,6 +19,7 @@
         }
         public abstract void ThreadUpdate();
         public abstract void Update();
+
         protected void RemoveUpdatable() => _gameCycleController.RemoveUpdatable(this);
     }
 }

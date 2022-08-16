@@ -5,7 +5,8 @@ namespace BotWorld2Core.Game.Bots.Actions
 {
     internal class GetEnergyBotAction : BotAction
     {
-        public override bool StopThread => false;
+        public override bool FreezeThread => false;
+
         private readonly WorldController _world;
 
         public GetEnergyBotAction(WorldController world)

@@ -8,12 +8,11 @@ namespace BotWorld2Core.Game.Bots
     internal class BotModel
     {
         public event Action<BotModel> OnDead;
+
         public float MaxHealth => GameSettings.MaxHealth;
         public float MaxEnergy => GameSettings.MaxEnergy;
         public int Age { get; set; }
         public int BotAte { get; set; }
-        public readonly int Birthday;
-        public readonly int Color;
         public float Health
         {
             get => _health;
@@ -32,16 +31,18 @@ namespace BotWorld2Core.Game.Bots
                 _energy = Math.Clamp(value, 0f, MaxEnergy);
             }
         }
-        public Vector2int Position;
-        public Vector2int Forward;
 
+        public readonly int Birthday;
+        public readonly int Color;
         public readonly NeuronNetwork Brain;
         public readonly BotSensor[] Sensors;
         public readonly BotAction[] Actions;
 
+        public Vector2int Position;
+        public Vector2int Forward;
+
         private float _health;
         private float _energy;
-
         private BotController _controller;
 
         public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position, int birthday = 0, int color = 0)

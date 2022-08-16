@@ -2,12 +2,6 @@ namespace BotWorld2Core.Game.General
 {
     public struct Vector2int
     {
-        public int X, Y;
-        public Vector2int(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
         public static Vector2int operator +(Vector2int a, Vector2int b)
         {
             return new Vector2int(a.X + b.X, a.Y + b.Y);
@@ -15,6 +9,13 @@ namespace BotWorld2Core.Game.General
         public static Vector2int operator -(Vector2int a, Vector2int b)
         {
             return new Vector2int(a.X - b.X, a.Y - b.Y);
+        }
+
+        public int X, Y;
+        public Vector2int(int x, int y)
+        {
+            X = x;
+            Y = y;
         }
         public void RotateLeft()
         {

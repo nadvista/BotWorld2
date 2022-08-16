@@ -3,10 +3,11 @@ namespace BotWorld2Core.Game.Ai
     public class NeuronNetwork
     {
         private const int MAX_MEMORY_LEN = 5000;
-        private NeuronLayer[] _layers;
+
         public readonly int InputLayerLength;
         public readonly int OutputLayerLength;
 
+        private NeuronLayer[] _layers;
         private Dictionary<string, double[]> _memory = new Dictionary<string, double[]>();
 
         public NeuronNetwork(params NeuronLayer[] layers)
@@ -36,11 +37,7 @@ namespace BotWorld2Core.Game.Ai
                 var layerNeurons = new Neuron[scheme.NeuronTypes[layerIndex].Length];
                 for (int neuronIndex = 0; neuronIndex < layerNeurons.Length; neuronIndex++)
                 {
-#pragma warning disable CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
-#pragma warning disable CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
                     layerNeurons[neuronIndex] = (Neuron)Activator.CreateInstance(scheme.NeuronTypes[layerIndex][neuronIndex]);
-#pragma warning restore CS8601 // Возможно, назначение-ссылка, допускающее значение NULL.
-#pragma warning restore CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
                 }
                 _layers[layerIndex] = new NeuronLayer(layerNeurons);
             }

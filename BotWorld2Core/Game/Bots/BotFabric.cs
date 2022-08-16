@@ -133,7 +133,6 @@ namespace BotWorld2Core.Game.Bots
                 new BotParamsSensor()
             };
         }
-
         private BotAction[] CreateActions()
         {
             return new BotAction[] {

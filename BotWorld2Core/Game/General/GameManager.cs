@@ -19,7 +19,6 @@ namespace BotWorld2Core.Game.General
         private List<BotModel> _bots = new List<BotModel>();
         private List<BotModel> _born = new List<BotModel>();
         private List<BotModel> _dead = new List<BotModel>();
-
         private List<Script> _scripts = new List<Script>();
 
         public GameManager()
@@ -31,6 +30,7 @@ namespace BotWorld2Core.Game.General
             _worldController.CellUpdated += e => OnCellUpdated?.Invoke(e);
             CreateBots();
         }
+
         public void Update()
         {
             _gameCycleController.Update();
@@ -60,7 +60,24 @@ namespace BotWorld2Core.Game.General
             _born.Add(model);
             model.OnDead += BotDead;
         }
+        public WorldCell GetCell(Vector2int cellPos) => _worldController.GetCell(cellPos);
+        public void Reset()
+        {
+            _bots.Clear();
+            _born.Clear();
+            _dead.Clear();
+            _worldController.Reset();
+            Step = 0;
+            CreateBots();
+            _scripts.ForEach(e => e.Reset());
+        }
 
+        private void BotDead(BotModel model)
+        {
+            _dead.Add(model);
+            model.OnDead -= BotDead;
+            _worldController.GetCell(model.Position).RemoveBot();
+        }
         private void CreateBots()
         {
             for (int i = 0; i < GameSettings.StartBotsCount; i++)
@@ -76,23 +93,6 @@ namespace BotWorld2Core.Game.General
                 var bot = _fabric.CreateRandom(new Vector2int(x, y));
                 AddBot(bot);
             }
-        }
-        public WorldCell GetCell(Vector2int cellPos) => _worldController.GetCell(cellPos);
-        public void Reset()
-        {
-            _bots.Clear();
-            _born.Clear();
-            _dead.Clear();
-            _worldController.Reset();
-            Step = 0;
-            CreateBots();
-            _scripts.ForEach(e => e.Reset());
-        }
-        private void BotDead(BotModel model)
-        {
-            _dead.Add(model);
-            model.OnDead -= BotDead;
-            _worldController.GetCell(model.Position).RemoveBot();
         }
     }
 }

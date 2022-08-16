@@ -5,13 +5,13 @@ namespace BotWorld2Core.Game.World
 {
     internal class WorldController
     {
-        private static object locker = new();
-
         public event Action<WorldCell> CellUpdated;
 
         public readonly int Width, Height;
+
         private WorldCell[,] _world;
         private int _foodCount = 0;
+
         public WorldController(IWorldCreationScheme scheme, Vector2int size)
         {
             Width = size.X;
@@ -63,6 +63,17 @@ namespace BotWorld2Core.Game.World
                 _foodCount++;
             }
         }
+        public WorldCell GetCell(Vector2int pos)
+        {
+            if (pos.X < 0)
+                pos.X = Width + pos.X;
+            if (pos.Y < 0)
+                pos.Y = Width + pos.Y;
+            pos.X %= Width;
+            pos.Y %= Height;
+            return _world[pos.X, pos.Y];
+        }
+
         private void InitializeCells(IWorldCreationScheme scheme)
         {
             for (int x = 0; x < Width; x++)
@@ -73,19 +84,6 @@ namespace BotWorld2Core.Game.World
                     cell.Updated += e => CellUpdated?.Invoke(e);
                     _world[x, y] = cell;
                 }
-            }
-        }
-        public WorldCell GetCell(Vector2int pos)
-        {
-            lock (locker)
-            {
-                if (pos.X < 0)
-                    pos.X = Width + pos.X;
-                if (pos.Y < 0)
-                    pos.Y = Width + pos.Y;
-                pos.X %= Width;
-                pos.Y %= Height;
-                return _world[pos.X, pos.Y];
             }
         }
     }

@@ -11,8 +11,6 @@ namespace BotWorld2Core.Game.World.Schemes
             Vector2int offset1 = new Vector2int(x ,y) - new Vector2int(GameSettings.WorldWidth / 4, GameSettings.WorldHeight / 2);
             Vector2int offset2 = new Vector2int(x, y) - new Vector2int(GameSettings.WorldWidth * 3 / 4, GameSettings.WorldHeight / 2);
 
-            
-
             var radius = Math.Sqrt(offset1.X * offset1.X + offset1.Y * offset1.Y) * radiusMultiplyer;
             var radius2 = Math.Sqrt(offset2.X * offset2.X + offset2.Y * offset2.Y) * radiusMultiplyer;
 

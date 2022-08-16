@@ -1,4 +1,5 @@
 ﻿using BotWorld2Core.Game.General;
+using BotWorld2Core.Game.Scripts;
 using BotWorld2Core.Game.World;
 
 namespace BotWorld2Core
@@ -11,7 +12,7 @@ namespace BotWorld2Core
         private static GameDrawer _currentDrawer => _drawers[_currentDrawerIndex];
         private static int _currentDrawerIndex;
 
-        private static Dictionary<ConsoleKeyInfo, Action> _handlers = new Dictionary<ConsoleKeyInfo, Action>();
+        private static Dictionary<ConsoleKey, Action> _handlers = new Dictionary<ConsoleKey, Action>();
 
         private static bool _showOutput = true;
         private static bool _pause = false;
@@ -19,16 +20,41 @@ namespace BotWorld2Core
         public static void Main()
         {
             _manager.OnCellUpdated += RedrawCell;
-            Console.SetWindowSize(1, 1);
-            Console.SetBufferSize(480, 65);
-            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            SetupConsole();
+
+            _manager.AddScript(new SunScript());
+
+            AddDrawers();
+            AddHandlers();
 
             RedrawAll();
+            StartGame();
+        }
+
+        private static void AddHandlers()
+        {
+            _handlers.Add(ConsoleKey.UpArrow, SelectNextDrawer);
+            _handlers.Add(ConsoleKey.DownArrow, SelectPreviousDrawer);
+            _handlers.Add(ConsoleKey.Q, SwitchOutputMode);
+            _handlers.Add(ConsoleKey.P, SwitchPause);
+        }
+
+        private static void AddDrawers()
+        {
+            _drawers.Add(new SunLevelDrawer());
+            _drawers.Add(new SimpleMapDrawer());
+            _drawers.Add(new HealthDrawer());
+            _drawers.Add(new AgeDrawer());
+            _drawers.Add(new AgressiveDrawer());
+        }
+
+        private static void StartGame()
+        {
             while (true)
             {
                 if (Console.KeyAvailable)
                 {
-                    var key = Console.ReadKey(true);
+                    var key = Console.ReadKey(true).Key;
                     if (_handlers.ContainsKey(key))
                         _handlers[key].Invoke();
                 }
@@ -47,6 +73,14 @@ namespace BotWorld2Core
                 }
             }
         }
+
+        private static void SetupConsole()
+        {
+            Console.SetWindowSize(1, 1);
+            Console.SetBufferSize(480, 65);
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+        }
+
         private static void SelectNextDrawer()
         {
             _currentDrawerIndex++;
@@ -83,7 +117,7 @@ namespace BotWorld2Core
 
             Console.WriteLine($"Current step {_manager.Step}--------------------------------------");
             Console.WriteLine($"BotsAlive {_manager.BotsAlive}--------------------------------------");
-            Console.WriteLine(_currentDrawer.DrawerName);
+            Console.WriteLine($"Map mode - {_currentDrawer.DrawerName}");
         }
         private static void RedrawAll()
         {
