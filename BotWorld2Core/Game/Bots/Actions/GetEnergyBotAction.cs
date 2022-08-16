@@ -5,6 +5,7 @@ namespace BotWorld2Core.Game.Bots.Actions
 {
     internal class GetEnergyBotAction : BotAction
     {
+        public override bool StopThread => false;
         private readonly WorldController _world;
 
         public GetEnergyBotAction(WorldController world)
@@ -18,6 +19,7 @@ namespace BotWorld2Core.Game.Bots.Actions
             var bonusEnergy = cell.SunLevel * GameSettings.SunEnergyBonusMultiplyer;
             var bonusHealth = cell.SunLevel * GameSettings.SunEnergyBonusMultiplyer;
 
+            var oldHealth = _self.Health;
             _self.Energy += bonusEnergy;
             _self.Health += bonusHealth;
         }

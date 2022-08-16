@@ -27,6 +27,7 @@ namespace BotWorld2Core.Game.Bots.Actions
 
                 _self.Health += bonusHealth;
                 _self.Energy += bonusEnergy;
+                _self.BotAte++;
             }
             else if (_world.HasFood(targetPos))
             {

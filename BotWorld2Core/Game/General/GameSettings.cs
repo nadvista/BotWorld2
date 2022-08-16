@@ -3,10 +3,10 @@
     internal class GameSettings
     {
         #region Bots
-        public const int BotHiddenLayersCount = 3;
-        public const int BotHiddenLayersLenght = 3;
+        public const int BotHiddenLayersCount = 6;
+        public const int BotHiddenLayersLenght = 4;
 
-        public const float MaxHealth = 1000;
+        public const float MaxHealth = 250;
         public const float StartHealth = 100;
 
         public const float MaxEnergy = 40;
@@ -18,21 +18,22 @@
         #endregion
 
         #region Rules
-        public const float EatBotHealthBonus = 4;
-        public const float EatFoodHealthBonus = 4;
-        public const float EatBotEnergyBonus = 25;
-        public const float EatFoodEnergyBonus = 10;
+        public static float EatBotHealthBonus = 10;
+        public static float EatFoodHealthBonus = 15;
+        public static float EatBotEnergyBonus = 5;
+        public static float EatFoodEnergyBonus = 20;
 
-        public const float SunEnergyBonusMultiplyer = 1f;
-        public const float SunHealthBonusMultiplyer = .1f;
+        public static float SunEnergyBonusMultiplyer = .6f;
+        public static float SunHealthBonusMultiplyer = 1.5f;
+        public static float SunShare = 1;
 
-        public const int ChildEnergyCost = 15;
-        public const float MutationChance = .05f;
+        public static int ChildEnergyCost = 20;
+        public static float MutationChance = .1f;
+        
+        public static int StartBotsCount = 10000;
 
-        public const int StartBotsCount = 1000;
-
-        public const int FoodMaxCount = 20000;
-        public const int FoodPlaceByStep = 500;
+        public static int FoodMaxCount = 2000;
+        public static int FoodPlaceByStep = 50;
         #endregion
 
         #region Program
