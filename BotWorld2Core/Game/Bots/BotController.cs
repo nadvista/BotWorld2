@@ -38,7 +38,15 @@ namespace BotWorld2Core.Game.Bots
         public override void Update()
         {
             if (!_lastActionExecuted)
+            {
+                if(_lastAction == null)
+                {
+                    var thread = Thread.CurrentThread;
+                    var threadHash = thread.GetHashCode();
+                    var threadId = thread.ManagedThreadId;
+                }
                 _lastAction.Execute();
+            }
 
             //безопасно, т.к при создании модели происходит проверка совпадения длины выходного уровня НС и кол-ва  Actions
             _model.Health--;

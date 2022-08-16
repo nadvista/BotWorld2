@@ -13,7 +13,7 @@ namespace BotWorld2Core.Game.Scripts
         private readonly float startHealthBonus = GameSettings.SunHealthBonusMultiplyer;
 
         private int _timer = 0;
-        private int _cycleDuration = 1500;
+        private int _cycleDuration = 8000;
 
         public SunScript()
         {
@@ -38,6 +38,7 @@ namespace BotWorld2Core.Game.Scripts
         {
             GameSettings.SunEnergyBonusMultiplyer = startEnergyBonus;
             GameSettings.SunHealthBonusMultiplyer = startHealthBonus;
+            _timer = 0;
         }
     }
 }

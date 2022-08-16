@@ -16,13 +16,15 @@
         }
         public void Update()
         {
+            List<Task> tasks = new List<Task>(_updatables.Count);
             foreach (var updatable in _updatables)
             {
                 var updatableArgument = updatable;
                 var task = Task.Run(() => updatableArgument.ThreadUpdate());
+                tasks.Add(task);
             }
-            Task.WaitAll();
-            _updatables.ForEach(e => e.Update()); //360.8
+            Task.WaitAll(tasks.ToArray());
+            _updatables.ForEach(e => e.Update());
 
             foreach (var remove in _toRemove)
                 _updatables.Remove(remove);

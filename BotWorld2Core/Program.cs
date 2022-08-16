@@ -61,7 +61,7 @@ namespace BotWorld2Core
 
                 if (_pause)
                 {
-                    return;
+                    continue;
                 }
                 _manager.Update();
                 WriteInfo();

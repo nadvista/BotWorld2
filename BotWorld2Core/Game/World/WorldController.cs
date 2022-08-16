@@ -68,7 +68,7 @@ namespace BotWorld2Core.Game.World
             if (pos.X < 0)
                 pos.X = Width + pos.X;
             if (pos.Y < 0)
-                pos.Y = Width + pos.Y;
+                pos.Y = Height + pos.Y;
             pos.X %= Width;
             pos.Y %= Height;
             return _world[pos.X, pos.Y];
