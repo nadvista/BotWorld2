@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace BotWorld2Core.Game.Scripts
 {
-    internal class SunScript : Updatable
+    internal class SunScript : Script
     {
         private int _timer = 0;
         private int _cycleDuration = 1500;
         private readonly float startEnergyBonus = GameSettings.SunEnergyBonusMultiplyer;
         private readonly float startHealthBonus = GameSettings.SunHealthBonusMultiplyer;
 
-        public SunScript(GameCycleController cycleController) : base(cycleController)
+        public SunScript()
         {
         }
 
@@ -34,6 +34,12 @@ namespace BotWorld2Core.Game.Scripts
             _timer++;
             if (_timer == _cycleDuration)
                 _timer = 0;
+        }
+
+        public override void Reset()
+        {
+            GameSettings.SunEnergyBonusMultiplyer = startEnergyBonus;
+            GameSettings.SunHealthBonusMultiplyer = startHealthBonus;
         }
     }
 }

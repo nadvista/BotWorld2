@@ -20,7 +20,7 @@ namespace BotWorld2Core.Game.General
         private List<BotModel> _born = new List<BotModel>();
         private List<BotModel> _dead = new List<BotModel>();
 
-        private List<Updatable> _scripts = new List<Updatable>();
+        private List<Script> _scripts = new List<Script>();
 
         public GameManager()
         {
@@ -50,7 +50,7 @@ namespace BotWorld2Core.Game.General
             _dead.Clear();
             _born.Clear();
         }
-        public void AddScript(Updatable script)
+        public void AddScript(Script script)
         {
             script.SetCycleController(_gameCycleController);
             _scripts.Add(script);
@@ -86,6 +86,7 @@ namespace BotWorld2Core.Game.General
             _worldController.Reset();
             Step = 0;
             CreateBots();
+            _scripts.ForEach(e => e.Reset());
         }
         private void BotDead(BotModel model)
         {
