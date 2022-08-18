@@ -21,14 +21,17 @@ namespace BotWorld2Core.Game.General
         private List<BotModel> _dead = new List<BotModel>();
         private List<Script> _scripts = new List<Script>();
 
-        public GameManager()
+        private GameManager()
         {
-            _worldController = new WorldController(new IslandCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
             _gameCycleController = new GameCycleController();
             _fabric = new BotFabric(_worldController, _gameCycleController, this);
 
             _worldController.CellUpdated += e => OnCellUpdated?.Invoke(e);
             CreateBots();
+        }
+        public GameManager(WorldController world) : base()
+        {
+            _worldController = world;
         }
 
         public void Update()

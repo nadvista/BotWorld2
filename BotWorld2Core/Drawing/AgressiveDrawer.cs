@@ -1,10 +1,10 @@
 ﻿using BotWorld2Core.Game.World;
 
-namespace BotWorld2Core
+namespace BotWorld2Core.Drawing
 {
-    internal class AgeDrawer : GameDrawer
+    internal class AgressiveDrawer : GameDrawer
     {
-        public AgeDrawer() : base("Age ---------------")
+        public AgressiveDrawer() : base("Agressive ---------------")
         {
         }
 
@@ -15,22 +15,21 @@ namespace BotWorld2Core
                 Console.Write(' ');
                 return;
             }
-
-            var botAge = cell.GetBot().Age;
+            var aggr = cell.GetBot().BotAte;
             ConsoleColor color = ConsoleColor.White;
 
-            if (botAge < 50)
+            if (aggr < 1)
                 color = ConsoleColor.DarkBlue;
-            else if (botAge < 70)
+            else if (aggr < 3)
                 color = ConsoleColor.Blue;
-            else if (botAge < 120)
+            else if (aggr < 5)
                 color = ConsoleColor.Yellow;
-            else if (botAge < 160)
+            else if (aggr < 7)
                 color = ConsoleColor.Red;
-            else if (botAge < 200)
+            else if (aggr < 9)
                 color = ConsoleColor.DarkRed;
-            else if (botAge > 400)
-                color = ConsoleColor.Green;
+            else if (aggr > 11)
+                color = ConsoleColor.Yellow;
             Console.ForegroundColor = color;
             Console.Write('B');
         }

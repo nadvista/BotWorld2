@@ -2,13 +2,13 @@ namespace BotWorld2Core.Game.Ai
 {
     public class NeuronNetwork
     {
-        private const int MAX_MEMORY_LEN = 5000;
+        private const int MAX_MEMORY_LEN = 300;
 
         public readonly int InputLayerLength;
         public readonly int OutputLayerLength;
 
         private NeuronLayer[] _layers;
-        private Dictionary<string, double[]> _memory = new Dictionary<string, double[]>();
+        private Dictionary<string, double[]> _memory = new Dictionary<string, double[]>(300);
 
         public NeuronNetwork(params NeuronLayer[] layers)
         {

@@ -6,7 +6,7 @@
         public const int BotHiddenLayersCount = 2;
         public const int BotHiddenLayersLenght = 5;
 
-        public const float MaxHealth = 250;
+        public const float MaxHealth = 150;
         public const float StartHealth = 100;
 
         public const float MaxEnergy = 40;
@@ -19,22 +19,22 @@
         #endregion
 
         #region Rules
-        public static float EatBotHealthBonus = 10;
-        public static float EatFoodHealthBonus = 30;
-        public static float EatBotEnergyBonus = 5;
-        public static float EatFoodEnergyBonus = 30;
+        public static float EatBotHealthBonus = 25;
+        public static float EatFoodHealthBonus = 15;
+        public static float EatBotEnergyBonus = 25;
+        public static float EatFoodEnergyBonus = 10;
 
         public static float SunEnergyBonusMultiplyer = .6f;
-        public static float SunHealthBonusMultiplyer = 1.5f;
+        public static float SunHealthBonusMultiplyer = 1f;
         public static float SunShare = 1;
 
-        public static int ChildEnergyCost = 18;
-        public static float MutationChance = .1f;
+        public static int ChildEnergyCost = 10;
+        public static float MutationChance = .05f;
         
         public static int StartBotsCount = 2000;
 
-        public static int FoodMaxCount = 2000;
-        public static int FoodPlaceByStep = 50;
+        public static int FoodMaxCount = 3000;
+        public static int FoodPlaceByStep = 200;
         #endregion
 
         #region Program

@@ -21,7 +21,7 @@ namespace BotWorld2Core.Game.General
         {
             if (X == 0)
             {
-                Y = -Y;
+                X = -Y;
             }
             else if (X == 1)
             {

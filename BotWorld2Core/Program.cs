@@ -1,12 +1,14 @@
-﻿using BotWorld2Core.Game.General;
+﻿using BotWorld2Core.Drawing;
+using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.Scripts;
 using BotWorld2Core.Game.World;
+using BotWorld2Core.Game.World.Schemes;
 
 namespace BotWorld2Core
 {
     public class Program
     {
-        private static GameManager _manager = new GameManager();
+        private static GameManager _manager = new GameManager(new WorldController(new IslandCreationScheme(),new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
 
         private static List<GameDrawer> _drawers = new List<GameDrawer>();
         private static GameDrawer _currentDrawer => _drawers[_currentDrawerIndex];
@@ -29,6 +31,7 @@ namespace BotWorld2Core
 
             RedrawAll();
             StartGame();
+            
         }
 
         private static void AddHandlers()

@@ -63,7 +63,7 @@ namespace BotWorld2Core.Game.World
                 _foodCount++;
             }
         }
-        public WorldCell GetCell(Vector2int pos)
+        public virtual WorldCell GetCell(Vector2int pos)
         {
             if (pos.X < 0)
                 pos.X = Width + pos.X;

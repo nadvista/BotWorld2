@@ -1,6 +1,6 @@
 ﻿using BotWorld2Core.Game.World;
 
-namespace BotWorld2Core
+namespace BotWorld2Core.Drawing
 {
     internal abstract class GameDrawer
     {

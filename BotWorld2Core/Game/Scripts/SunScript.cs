@@ -13,7 +13,7 @@ namespace BotWorld2Core.Game.Scripts
         private readonly float startHealthBonus = GameSettings.SunHealthBonusMultiplyer;
 
         private int _timer = 0;
-        private int _cycleDuration = 8000;
+        private int _cycleDuration = 1500;
 
         public SunScript()
         {
@@ -24,15 +24,14 @@ namespace BotWorld2Core.Game.Scripts
         }
         public override void Update()
         {
-            var currentShare = Math.Abs(_timer / (float)(_cycleDuration/2) - 1);
+            var currentShare = 1 - _timer / (float)(_cycleDuration/2);
             GameSettings.SunShare = currentShare;
 
             GameSettings.SunEnergyBonusMultiplyer = startEnergyBonus*currentShare;
             GameSettings.SunHealthBonusMultiplyer = startHealthBonus*currentShare;
 
-            _timer++;
-            if (_timer == _cycleDuration)
-                _timer = 0;
+            if (_timer != _cycleDuration)
+                _timer++;
         }
         public override void Reset()
         {

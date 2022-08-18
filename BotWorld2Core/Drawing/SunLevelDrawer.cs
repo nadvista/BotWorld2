@@ -1,7 +1,7 @@
 ﻿using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
 
-namespace BotWorld2Core
+namespace BotWorld2Core.Drawing
 {
     internal class SunLevelDrawer : GameDrawer
     {
