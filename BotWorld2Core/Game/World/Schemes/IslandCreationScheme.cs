@@ -2,7 +2,7 @@
 
 namespace BotWorld2Core.Game.World.Schemes
 {
-    internal class IslandCreationScheme : IWorldCreationScheme
+    public class IslandCreationScheme : IWorldCreationScheme
     {
         private const float radiusMultiplyer = .1f;
 

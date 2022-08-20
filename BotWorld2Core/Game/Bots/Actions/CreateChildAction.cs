@@ -2,7 +2,7 @@
 
 namespace BotWorld2Core.Game.Bots.Actions
 {
-    internal class CreateChildAction : BotAction
+    public class CreateChildAction : BotAction
     {
         private BotFabric _fabric;
         private GameManager _manager;

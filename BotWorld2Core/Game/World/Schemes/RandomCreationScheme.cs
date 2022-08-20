@@ -2,7 +2,7 @@
 
 namespace BotWorld2Core.Game.World.Schemes
 {
-    internal class RandomCreationScheme : IWorldCreationScheme
+    public class RandomCreationScheme : IWorldCreationScheme
     {
         public WorldCell GetCell(int x, int y)
         {

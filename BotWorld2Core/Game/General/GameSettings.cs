@@ -1,6 +1,6 @@
 ﻿namespace BotWorld2Core.Game.General
 {
-    internal class GameSettings
+    public class GameSettings
     {
         #region Bots
         public const int BotHiddenLayersCount = 2;
@@ -35,6 +35,9 @@
 
         public static int FoodMaxCount = 3000;
         public static int FoodPlaceByStep = 200;
+
+        public static float MaxEatBugByStep = 1;
+        public static float MaxBugPlaceSize = 10;
         #endregion
 
         #region Program

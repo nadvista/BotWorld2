@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace BotWorld2Core.Game.Ai
 {
     public class NeuronNetwork

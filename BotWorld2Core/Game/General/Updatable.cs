@@ -1,6 +1,6 @@
 ﻿namespace BotWorld2Core.Game.General
 {
-    internal abstract class Updatable
+    public abstract class Updatable
     {
         protected GameCycleController _gameCycleController;
 

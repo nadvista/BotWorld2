@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BotWorld2Core.Game.Scripts
 {
-    internal abstract class Script : Updatable
+    public abstract class Script : Updatable
     {
         public Script() : base() { }
         public Script(GameCycleController controller) : base(controller)

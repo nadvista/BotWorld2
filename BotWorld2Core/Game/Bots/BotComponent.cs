@@ -1,6 +1,6 @@
 ﻿namespace BotWorld2Core.Game.Bots
 {
-    internal class BotComponent
+    public class BotComponent
     {
         protected BotModel _self { get; private set; }
 

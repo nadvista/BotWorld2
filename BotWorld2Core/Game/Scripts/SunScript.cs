@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BotWorld2Core.Game.Scripts
 {
-    internal class SunScript : Script
+    public class SunScript : Script
     {
         private readonly float startEnergyBonus = GameSettings.SunEnergyBonusMultiplyer;
         private readonly float startHealthBonus = GameSettings.SunHealthBonusMultiplyer;

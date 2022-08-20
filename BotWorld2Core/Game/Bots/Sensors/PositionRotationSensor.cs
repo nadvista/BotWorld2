@@ -1,6 +1,6 @@
 ﻿namespace BotWorld2Core.Game.Bots.Sensors
 {
-    internal class PositionRotationSensor : BotSensor
+    public class PositionRotationSensor : BotSensor
     {
         public override double[] GetData()
         {

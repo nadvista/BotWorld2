@@ -2,7 +2,7 @@
 
 namespace BotWorld2Core.Game.Bots.Sensors
 {
-    internal class BotParamsSensor : BotSensor
+    public class BotParamsSensor : BotSensor
     {
         public override double[] GetData()
         {

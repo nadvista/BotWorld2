@@ -2,10 +2,12 @@
 using BotWorld2Core.Game.Scripts;
 using BotWorld2Core.Game.World;
 using BotWorld2Core.Game.World.Schemes;
+using System;
+using System.Collections.Generic;
 
 namespace BotWorld2Core.Game.General
 {
-    internal class GameManager
+    public class GameManager
     {
         public event Action<WorldCell> OnCellUpdated;
 

@@ -3,6 +3,8 @@ using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.Scripts;
 using BotWorld2Core.Game.World;
 using BotWorld2Core.Game.World.Schemes;
+using System;
+using System.Collections.Generic;
 
 namespace BotWorld2Core
 {

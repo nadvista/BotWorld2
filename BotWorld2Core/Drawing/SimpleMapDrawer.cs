@@ -1,4 +1,5 @@
 ﻿using BotWorld2Core.Game.World;
+using System;
 
 namespace BotWorld2Core.Drawing
 {
@@ -23,7 +24,12 @@ namespace BotWorld2Core.Drawing
             else if (cell.HasFood)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write('B');
+                Console.Write('F');
+            }
+            else if(cell.HealthFoodBug > 0 || cell.EnergyFoodBug > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write('@');
             }
             else Console.Write(' ');
         }

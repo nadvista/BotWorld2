@@ -3,11 +3,13 @@ using BotWorld2Core.Game.Bots.Actions;
 using BotWorld2Core.Game.Bots.Sensors;
 using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
+using System;
+using System.Linq;
 using System.Reflection;
 
 namespace BotWorld2Core.Game.Bots
 {
-    internal class BotFabric
+    public class BotFabric
     {
         private static Type[] neuronsTypes = Assembly.GetExecutingAssembly()
             .GetTypes()
@@ -141,7 +143,8 @@ namespace BotWorld2Core.Game.Bots
                 new RotateRigthBotAction(),
                 new EatBotAction(_world),
                 new GetEnergyBotAction(_world),
-                new CreateChildAction(this, _manager)
+                new CreateChildAction(this, _manager),
+                new PlaceFoodAction(_world)
             };
         }
     }

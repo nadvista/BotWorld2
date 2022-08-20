@@ -2,10 +2,12 @@
 using BotWorld2Core.Game.Bots.Actions;
 using BotWorld2Core.Game.Bots.Sensors;
 using BotWorld2Core.Game.General;
+using System;
+using System.Linq;
 
 namespace BotWorld2Core.Game.Bots
 {
-    internal class BotModel
+    public class BotModel
     {
         public event Action<BotModel> OnDead;
 

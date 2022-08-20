@@ -1,9 +1,10 @@
 ﻿using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
+using System;
 
 namespace BotWorld2Core.Game.Bots.Actions
 {
-    internal class EatBotAction : BotAction
+    public class EatBotAction : BotAction
     {
         private readonly WorldController _world;
 
@@ -34,6 +35,17 @@ namespace BotWorld2Core.Game.Bots.Actions
                 _world.TakeFood(targetPos);
                 _self.Health += GameSettings.EatFoodHealthBonus;
                 _self.Energy += GameSettings.EatFoodEnergyBonus;
+            }
+            else if(targetCell.HealthFoodBug > 0 || targetCell.EnergyFoodBug > 0)
+            {
+                var healthBonus = Math.Min(Math.Min(GameSettings.MaxHealth - _self.Health, targetCell.HealthFoodBug), GameSettings.MaxEatBugByStep);
+                var energyBonus = Math.Min(Math.Min(GameSettings.MaxHealth - _self.Energy, targetCell.EnergyFoodBug), GameSettings.MaxEatBugByStep);
+                targetCell.EnergyFoodBug -= energyBonus;
+                targetCell.HealthFoodBug -= healthBonus;
+
+                _self.Health += healthBonus;
+                _self.Energy += energyBonus;
+
             }
 
         }

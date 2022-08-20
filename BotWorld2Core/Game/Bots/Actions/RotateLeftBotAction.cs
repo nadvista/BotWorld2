@@ -1,6 +1,6 @@
 ﻿namespace BotWorld2Core.Game.Bots.Actions
 {
-    internal class RotateLeftBotAction : BotAction
+    public class RotateLeftBotAction : BotAction
     {
         public override bool FreezeThread => false;
 

@@ -1,8 +1,9 @@
 ﻿using BotWorld2Core.Game.World;
+using System.Collections.Generic;
 
 namespace BotWorld2Core.Game.Bots.Sensors
 {
-    internal class EyeSensor : BotSensor
+    public class EyeSensor : BotSensor
     {
         private WorldController _world;
 

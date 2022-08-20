@@ -3,7 +3,7 @@ using BotWorld2Core.Game.World.Schemes;
 
 namespace BotWorld2Core.Game.World
 {
-    internal class WorldController
+    public class WorldController
     {
         public event Action<WorldCell> CellUpdated;
 

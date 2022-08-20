@@ -3,7 +3,7 @@ using BotWorld2Core.Game.World;
 
 namespace BotWorld2Core.Game.Bots.Actions
 {
-    internal class GetEnergyBotAction : BotAction
+    public class GetEnergyBotAction : BotAction
     {
         public override bool FreezeThread => false;
 

@@ -3,7 +3,7 @@ using BotWorld2Core.Game.World;
 
 namespace BotWorld2Core.Game.Bots.Actions
 {
-    internal class MoveBotAction : BotAction
+    public class MoveBotAction : BotAction
     {
         private readonly WorldController _world;
 
