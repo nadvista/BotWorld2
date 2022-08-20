@@ -50,10 +50,8 @@ namespace BotWorld2Core.Game.Bots
                 }
                 _lastAction.Execute();
             }
-
-            //безопасно, т.к при создании модели происходит проверка совпадения длины выходного уровня НС и кол-ва  Actions
-            _model.Health--;
-            _model.Age++;
+            for (int i = 0; i < _model.Scripts.Length; i++)
+                _model.Scripts[i].Update();
         }
 
         private double[] GetBrainAnswer(double[] inputs) => _model.Brain.Calculate(inputs);

@@ -3,67 +3,25 @@ using BotWorld2Core.Game.World.Schemes;
 
 namespace BotWorld2Core.Game.World
 {
-    public class WorldController
+    public class WorldController : IWorldController
     {
         public event Action<WorldCell> CellUpdated;
 
-        public readonly int Width, Height;
+        protected WorldCell[,] _world;
 
-        private WorldCell[,] _world;
-        private int _foodCount = 0;
+        public int Width => _width;
+        public int Height => _height;
+
+        private readonly int _width, _height;
 
         public WorldController(IWorldCreationScheme scheme, Vector2int size)
         {
-            Width = size.X;
-            Height = size.Y;
+            _width = size.X;
+            _height = size.Y;
             _world = new WorldCell[Width, Height];
             InitializeCells(scheme);
         }
-        public void Reset()
-        {
-            _foodCount = 0;
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    _world[x, y].Reset();
-                }
-            }
-        }
-        public void TakeFood(Vector2int pos)
-        {
-            if (GetCell(pos).HasFood)
-                _foodCount--;
-            GetCell(pos).TakeFood();
-        }
-        public bool HasFood(Vector2int pos) => GetCell(pos).HasFood;
-        public void PlaceFood()
-        {
-            const int maxCycle = 25000;
-            for (int i = 0; i < GameSettings.FoodPlaceByStep; i++)
-            {
-                if (_foodCount >= GameSettings.FoodMaxCount)
-                    return;
-                int x = 0;
-                int y = 0;
-                WorldCell cell;
-                int cycle = 0;
-                do
-                {
-                    x = Global.Random.Next(0, GameSettings.WorldWidth);
-                    y = Global.Random.Next(0, GameSettings.WorldHeight);
-                    cell = GetCell(new Vector2int(x, y));
-                    if (++cycle == maxCycle) break;
-                } while (cell.IsWall && cell.HasFood);
-
-                if (cycle < maxCycle)
-                    cell.PlaceFood();
-                else cycle = 0;
-
-                _foodCount++;
-            }
-        }
-        public virtual WorldCell GetCell(Vector2int pos)
+        public WorldCell GetCell(Vector2int pos)
         {
             if (pos.X < 0)
                 pos.X = Width + pos.X;
@@ -72,6 +30,16 @@ namespace BotWorld2Core.Game.World
             pos.X %= Width;
             pos.Y %= Height;
             return _world[pos.X, pos.Y];
+        }
+        public void Reset()
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    _world[x, y].Reset();
+                }
+            }
         }
 
         private void InitializeCells(IWorldCreationScheme scheme)

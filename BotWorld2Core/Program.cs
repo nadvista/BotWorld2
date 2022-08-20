@@ -1,4 +1,5 @@
 ﻿using BotWorld2Core.Drawing;
+using BotWorld2Core.Game.Bots;
 using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.Scripts;
 using BotWorld2Core.Game.World;
@@ -10,7 +11,10 @@ namespace BotWorld2Core
 {
     public class Program
     {
-        private static GameManager _manager = new GameManager(new WorldController(new IslandCreationScheme(),new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight)));
+        private static WorldController _world;
+        private static GameManager _manager;
+        private static StepsCounterScript _stepsCounter;
+        private static GameCycleController _cycleController;
 
         private static List<GameDrawer> _drawers = new List<GameDrawer>();
         private static GameDrawer _currentDrawer => _drawers[_currentDrawerIndex];
@@ -23,17 +27,23 @@ namespace BotWorld2Core
 
         public static void Main()
         {
+            _world = new WorldController(new IslandCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
+            _cycleController = new GameCycleController();
+            _manager = new GameManager(_world, _cycleController, new BotFabric(_world,_cycleController));
+            _stepsCounter = new StepsCounterScript();
+
             _manager.OnCellUpdated += RedrawCell;
             SetupConsole();
 
             _manager.AddScript(new SunScript());
+            _manager.AddScript(new FoodDispenserScript(_world));
+            _manager.AddScript(_stepsCounter);
 
             AddDrawers();
             AddHandlers();
 
             RedrawAll();
             StartGame();
-            
         }
 
         private static void AddHandlers()
@@ -120,7 +130,7 @@ namespace BotWorld2Core
         {
             Console.SetCursorPosition(0, GameSettings.WorldHeight + 2);
 
-            Console.WriteLine($"Current step {_manager.Step}--------------------------------------");
+            Console.WriteLine($"Current step {_stepsCounter.Step}--------------------------------------");
             Console.WriteLine($"BotsAlive {_manager.BotsAlive}--------------------------------------");
             Console.WriteLine($"Map mode - {_currentDrawer.DrawerName}");
         }

@@ -10,34 +10,30 @@ namespace BotWorld2Core.Game.General
     public class GameManager
     {
         public event Action<WorldCell> OnCellUpdated;
-
-        public int Step { get; private set; }
         public int BotsAlive => _bots.Count;
 
-        private readonly WorldController _worldController;
+        private readonly IWorldController _worldController;
         private readonly GameCycleController _gameCycleController;
-        private readonly BotFabric _fabric;
+        private readonly IBotFabric _fabric;
 
         private List<BotModel> _bots = new List<BotModel>();
         private List<BotModel> _born = new List<BotModel>();
         private List<BotModel> _dead = new List<BotModel>();
         private List<Script> _scripts = new List<Script>();
 
-        public GameManager(WorldController world)
+        public GameManager(IWorldController world, GameCycleController cycleController, IBotFabric fabric)
         {
             _worldController = world;
             _worldController.CellUpdated += e => OnCellUpdated?.Invoke(e);
-            _gameCycleController = new GameCycleController();
-            _fabric = new BotFabric(_worldController, _gameCycleController, this);
+            _gameCycleController = cycleController;
+            _fabric = fabric;
+            _fabric.BotCreated += AddBot;
             CreateBots();
         }
 
         public void Update()
         {
             _gameCycleController.Update();
-
-            Step++;
-            _worldController.PlaceFood();
 
             foreach (var bot in _dead)
             {
@@ -68,9 +64,13 @@ namespace BotWorld2Core.Game.General
             _born.Clear();
             _dead.Clear();
             _worldController.Reset();
-            Step = 0;
+
             CreateBots();
             _scripts.ForEach(e => e.Reset());
+        }
+        public T GetScript<T>() where T: Script
+        {
+            return _scripts.First(e => e is T) as T;
         }
 
         private void BotDead(BotModel model)

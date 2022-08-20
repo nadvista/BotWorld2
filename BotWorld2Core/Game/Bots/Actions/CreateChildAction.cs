@@ -4,13 +4,13 @@ namespace BotWorld2Core.Game.Bots.Actions
 {
     public class CreateChildAction : BotAction
     {
-        private BotFabric _fabric;
-        private GameManager _manager;
+        private IBotFabric _fabric;
+        private Action<BotModel> _onCreated;
 
-        public CreateChildAction(BotFabric fabric, GameManager manager)
+        public CreateChildAction(IBotFabric fabric, Action<BotModel> createdChildHandler)
         {
             _fabric = fabric;
-            _manager = manager;
+            _onCreated = createdChildHandler;
         }
 
         public override void Execute()
@@ -20,7 +20,7 @@ namespace BotWorld2Core.Game.Bots.Actions
 
             if (!_fabric.CreateChild(_self, out var child))
                 return;
-            _manager.AddBot(child);
+            _onCreated.Invoke(child);
             _self.Energy -= GameSettings.ChildEnergyCost;
         }
     }

@@ -21,7 +21,7 @@ namespace BotWorld2Core.Drawing
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write('B');
             }
-            else if (cell.HasFood)
+            else if (cell.HasFood.Value)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write('F');

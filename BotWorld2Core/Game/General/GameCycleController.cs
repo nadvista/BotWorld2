@@ -1,6 +1,6 @@
 ﻿namespace BotWorld2Core.Game.General
 {
-    internal class GameCycleController
+    public class GameCycleController
     {
         private List<Updatable> _updatables = new List<Updatable>();
         private List<Updatable> _toRemove = new List<Updatable>();

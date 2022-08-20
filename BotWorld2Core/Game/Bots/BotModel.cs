@@ -1,5 +1,6 @@
 ﻿using BotWorld2Core.Game.Ai;
 using BotWorld2Core.Game.Bots.Actions;
+using BotWorld2Core.Game.Bots.Scripts;
 using BotWorld2Core.Game.Bots.Sensors;
 using BotWorld2Core.Game.General;
 using System;
@@ -39,6 +40,7 @@ namespace BotWorld2Core.Game.Bots
         public readonly NeuronNetwork Brain;
         public readonly BotSensor[] Sensors;
         public readonly BotAction[] Actions;
+        public readonly BotScript[] Scripts;
 
         public Vector2int Position;
         public Vector2int Forward;
@@ -47,7 +49,7 @@ namespace BotWorld2Core.Game.Bots
         private float _energy;
         private BotController _controller;
 
-        public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, Vector2int position, int birthday = 0, int color = 0)
+        public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, BotScript[] scripts, Vector2int position, int birthday = 0, int color = 0)
         {
             if (brain == null
                 || sensors == null || sensors.Any(e => e == null)
@@ -61,6 +63,7 @@ namespace BotWorld2Core.Game.Bots
             Sensors = sensors;
             Actions = actions;
             Birthday = birthday;
+            Scripts = scripts;
 
             _health = GameSettings.StartHealth;
             _energy = GameSettings.StartEnergy;
@@ -70,15 +73,16 @@ namespace BotWorld2Core.Game.Bots
 
             BindComponents(sensors);
             BindComponents(actions);
+            BindComponents(scripts);
 
             _controller = new BotController(cycleController, this);
             Color = color;
         }
 
-        private void BindComponents(BotComponent[] sensors)
+        private void BindComponents(BotComponent[] components)
         {
-            for (int i = 0; i < sensors.Length; i++)
-                sensors[i].SetBot(this);
+            for (int i = 0; i < components.Length; i++)
+                components[i].SetBot(this);
         }
     }
 }

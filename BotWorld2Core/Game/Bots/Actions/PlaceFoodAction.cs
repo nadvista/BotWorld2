@@ -10,9 +10,9 @@ namespace BotWorld2Core.Game.Bots.Actions
 {
     class PlaceFoodAction : BotAction
     {
-        private WorldController _world;
+        private IWorldController _world;
 
-        public PlaceFoodAction(WorldController world)
+        public PlaceFoodAction(IWorldController world)
         {
             _world = world;
         }

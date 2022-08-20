@@ -1,4 +1,5 @@
 ﻿using BotWorld2Core.Game.Bots;
+using BotWorld2Core.Game.General;
 using System;
 
 namespace BotWorld2Core.Game.World
@@ -10,7 +11,7 @@ namespace BotWorld2Core.Game.World
         public bool HasBot => _currentBot != null;
         public bool CanStayHere => !IsWall && !HasBot;
 
-        public bool HasFood { get; private set; }
+        public ObservableVar<bool> HasFood { get; private set; }
         public float HealthFoodBug { get => _healthBug; 
             set
             {
@@ -36,7 +37,7 @@ namespace BotWorld2Core.Game.World
         public WorldCell(bool isWall, bool hasFood, float sunLevel, int x, int y)
         {
             IsWall = isWall;
-            HasFood = hasFood;
+            HasFood = new ObservableVar<bool>(hasFood);
             SunLevel = sunLevel;
             X = x;
             Y = y;
@@ -55,18 +56,18 @@ namespace BotWorld2Core.Game.World
         }
         public void PlaceFood()
         {
-            HasFood = true;
+            HasFood.Value = true;
             Updated?.Invoke(this);
         }
         public void TakeFood()
         {
-            HasFood = false;
+            HasFood.Value = false;
             Updated?.Invoke(this);
         }
         public void Reset()
         {
             _currentBot = null;
-            HasFood = false;
+            HasFood.Value = false;
             Updated?.Invoke(this);
             EnergyFoodBug = 0;
             HealthFoodBug = 0;

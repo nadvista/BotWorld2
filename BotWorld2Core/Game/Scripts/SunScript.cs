@@ -19,9 +19,6 @@ namespace BotWorld2Core.Game.Scripts
         {
         }
 
-        public override void ThreadUpdate()
-        {  
-        }
         public override void Update()
         {
             var currentShare = 1 - _timer / (float)(_cycleDuration/2);

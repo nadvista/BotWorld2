@@ -14,5 +14,9 @@ namespace BotWorld2Core.Game.Scripts
         { }
 
         public abstract void Reset();
+        public override void ThreadUpdate()
+        {
+            
+        }
     }
 }

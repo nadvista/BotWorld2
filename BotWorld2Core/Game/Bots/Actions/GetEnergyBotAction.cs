@@ -7,9 +7,9 @@ namespace BotWorld2Core.Game.Bots.Actions
     {
         public override bool FreezeThread => false;
 
-        private readonly WorldController _world;
+        private readonly IWorldController _world;
 
-        public GetEnergyBotAction(WorldController world)
+        public GetEnergyBotAction(IWorldController world)
         {
             _world = world;
         }

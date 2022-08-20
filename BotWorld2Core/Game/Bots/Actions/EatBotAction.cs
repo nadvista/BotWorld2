@@ -6,9 +6,9 @@ namespace BotWorld2Core.Game.Bots.Actions
 {
     public class EatBotAction : BotAction
     {
-        private readonly WorldController _world;
+        private readonly IWorldController _world;
 
-        public EatBotAction(WorldController world)
+        public EatBotAction(IWorldController world)
         {
             _world = world;
         }
@@ -30,9 +30,9 @@ namespace BotWorld2Core.Game.Bots.Actions
                 _self.Energy += bonusEnergy;
                 _self.BotAte++;
             }
-            else if (_world.HasFood(targetPos))
+            else if (targetCell.HasFood.Value)
             {
-                _world.TakeFood(targetPos);
+                targetCell.TakeFood();
                 _self.Health += GameSettings.EatFoodHealthBonus;
                 _self.Energy += GameSettings.EatFoodEnergyBonus;
             }

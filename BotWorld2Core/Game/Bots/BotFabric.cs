@@ -1,7 +1,9 @@
 ﻿using BotWorld2Core.Game.Ai;
 using BotWorld2Core.Game.Bots.Actions;
+using BotWorld2Core.Game.Bots.Scripts;
 using BotWorld2Core.Game.Bots.Sensors;
 using BotWorld2Core.Game.General;
+using BotWorld2Core.Game.Scripts;
 using BotWorld2Core.Game.World;
 using System;
 using System.Linq;
@@ -9,8 +11,10 @@ using System.Reflection;
 
 namespace BotWorld2Core.Game.Bots
 {
-    public class BotFabric
+    public class BotFabric : IBotFabric
     {
+        public event Action<BotModel> BotCreated;
+
         private static Type[] neuronsTypes = Assembly.GetExecutingAssembly()
             .GetTypes()
             .Where(e => typeof(Neuron).IsAssignableFrom(e))
@@ -19,16 +23,14 @@ namespace BotWorld2Core.Game.Bots
         private Random _random = Global.Random;
 
         private GameCycleController _cycleController;
-        private WorldController _world;
-        private GameManager _manager;
+        private IWorldController _world;
 
-        public BotFabric(WorldController worldController, GameCycleController cycleController, GameManager manager)
+        public BotFabric(IWorldController worldController, GameCycleController cycleController)
         {
             _world = worldController;
             _cycleController = cycleController;
-            _manager = manager;
         }
-        public BotModel CreateRandom(Vector2int position)
+        public BotModel CreateRandom(Vector2int position, int Step = 0)
         {
             var layers = new NeuronLayer[2 + GameSettings.BotHiddenLayersCount];
             //создаем скрытые слои
@@ -41,6 +43,7 @@ namespace BotWorld2Core.Game.Bots
             }
             var sensors = CreateSensors();
             var actions = CreateActions();
+            var scripts = CreateScripts();
 
             layers[0] = new NeuronLayer(sensors.Sum(e => e.GetDataSize()));
             layers[^1] = new NeuronLayer(actions.Length);
@@ -48,11 +51,11 @@ namespace BotWorld2Core.Game.Bots
             var network = new NeuronNetwork(layers);
             var color = Global.Random.Next(GameSettings.BotColorsCount);
 
-            var bot = new BotModel(_cycleController, network, sensors, actions, position, _manager.Step,color);
+            var bot = new BotModel(_cycleController, network, sensors, actions, scripts, position, Step, color);
             _world.GetCell(position).PlaceBot(bot);
             return bot;
         }
-        public bool CreateChild(BotModel parent, out BotModel child)
+        public bool CreateChild(BotModel parent, out BotModel child, int Step = 0)
         {
             var parentBrainScheme = parent.Brain.GetScheme();
 
@@ -112,6 +115,7 @@ namespace BotWorld2Core.Game.Bots
             //add components
             var sensors = CreateSensors();
             var actions = CreateActions();
+            var scripts = CreateScripts();
 
             var childBrainScheme = new NetworkCreationScheme(weights, neurons);
             var network = new NeuronNetwork(childBrainScheme);
@@ -122,11 +126,14 @@ namespace BotWorld2Core.Game.Bots
             else if (color >= GameSettings.BotColorsCount) 
                 color = GameSettings.BotColorsCount - 1;
 
-            child = new BotModel(_cycleController, network, sensors, actions, childPostion, _manager.Step, color);
+            child = new BotModel(_cycleController, network, sensors, actions, scripts, childPostion, Step, color);
             _world.GetCell(childPostion).PlaceBot(child);
             return true;
         }
-
+        private void OnChildCreatedHandler(BotModel model)
+        {
+            BotCreated?.Invoke(model);
+        }
         private BotSensor[] CreateSensors()
         {
             return new BotSensor[] {
@@ -143,8 +150,16 @@ namespace BotWorld2Core.Game.Bots
                 new RotateRigthBotAction(),
                 new EatBotAction(_world),
                 new GetEnergyBotAction(_world),
-                new CreateChildAction(this, _manager),
+                new CreateChildAction(this, OnChildCreatedHandler),
                 new PlaceFoodAction(_world)
+            };
+        }
+        private BotScript[] CreateScripts()
+        {
+            return new BotScript[]
+            {
+                new BotDamageDoerScript(),
+                new BotAgingScript()
             };
         }
     }
