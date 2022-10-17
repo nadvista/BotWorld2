@@ -1,12 +1,19 @@
-﻿namespace BotWorld2Core.Game.Bots.Actions
+﻿using BotWorld2Core.Game.Bots.Components;
+
+namespace BotWorld2Core.Game.Bots.Actions
 {
     public class RotateRigthBotAction : BotAction
     {
         public override bool FreezeThread => false;
+        private BotPositionController _pos;
+        public override void ModelCreated()
+        {
+            _pos = _self.GetComponent<BotPositionController>();
+        }
 
         public override void Execute()
         {
-            _self.Forward.RotateRight();
+            _pos.Forward.RotateRight();
         }
     }
 }

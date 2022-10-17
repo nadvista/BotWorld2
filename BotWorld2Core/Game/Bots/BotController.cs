@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace BotWorld2Core.Game.Bots
 {
-    internal class BotController : Updatable
+    public class BotController : Updatable
     {
         private BotAction _lastAction;
         private bool _lastActionExecuted;
@@ -15,7 +15,6 @@ namespace BotWorld2Core.Game.Bots
         public BotController(GameCycleController cycle, BotModel model) : base(cycle)
         {
             _model = model;
-            _model.OnDead += OnDeadHandler;
         }
 
         public override void ThreadUpdate()
@@ -28,13 +27,13 @@ namespace BotWorld2Core.Game.Bots
             var index = Array.IndexOf(answer, answer.Max());
             _lastAction = _model.Actions[index];
 
-            if(!_lastAction.FreezeThread)
+            if (!_lastAction.FreezeThread)
             {
                 _lastAction.Execute();
                 _lastActionExecuted = true;
-            }    
+            }
         }
-        public void OnDeadHandler(BotModel model)
+        public void Remove()
         {
             RemoveUpdatable();
         }
@@ -42,7 +41,7 @@ namespace BotWorld2Core.Game.Bots
         {
             if (!_lastActionExecuted)
             {
-                if(_lastAction == null)
+                if (_lastAction == null)
                 {
                     var thread = Thread.CurrentThread;
                     var threadHash = thread.GetHashCode();

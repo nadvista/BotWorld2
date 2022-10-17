@@ -10,46 +10,14 @@ namespace BotWorld2Core.Game.Bots
 {
     public class BotModel
     {
-        public event Action<BotModel> OnDead;
-
-        public float MaxHealth => GameSettings.MaxHealth;
-        public float MaxEnergy => GameSettings.MaxEnergy;
-        public int Age { get; set; }
-        public int BotAte { get; set; }
-        public float Health
-        {
-            get => _health;
-            set
-            {
-                _health = Math.Clamp(value, 0f, MaxHealth);
-                if (_health == 0)
-                    OnDead?.Invoke(this);
-            }
-        }
-        public float Energy
-        {
-            get => _energy;
-            set
-            {
-                _energy = Math.Clamp(value, 0f, MaxEnergy);
-            }
-        }
-
-        public readonly int Birthday;
-        public readonly int Color;
         public readonly NeuronNetwork Brain;
         public readonly BotSensor[] Sensors;
         public readonly BotAction[] Actions;
         public readonly BotScript[] Scripts;
+        public readonly BotComponent[] Components;
+        public readonly BotController Controller;
 
-        public Vector2int Position;
-        public Vector2int Forward;
-
-        private float _health;
-        private float _energy;
-        private BotController _controller;
-
-        public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, BotScript[] scripts, Vector2int position, int birthday = 0, int color = 0)
+        public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, BotScript[] scripts, BotComponent[] components)
         {
             if (brain == null
                 || sensors == null || sensors.Any(e => e == null)
@@ -62,22 +30,23 @@ namespace BotWorld2Core.Game.Bots
             Brain = brain;
             Sensors = sensors;
             Actions = actions;
-            Birthday = birthday;
             Scripts = scripts;
-
-            _health = GameSettings.StartHealth;
-            _energy = GameSettings.StartEnergy;
-
-            Position = position;
-            Forward = new Vector2int(1, 0);
+            Components = components;
 
             BindComponents(sensors);
             BindComponents(actions);
             BindComponents(scripts);
 
-            _controller = new BotController(cycleController, this);
-            Color = color;
+            foreach (var sens in sensors)
+                sens.ModelCreated();
+            foreach (var act in actions)
+                act.ModelCreated();
+            foreach (var script in scripts)
+                script.ModelCreated();
+
+            Controller = new BotController(cycleController, this);
         }
+        public T GetComponent<T>() where T : BotComponent => (T)Components.First(e => e is T);
 
         private void BindComponents(BotComponent[] components)
         {

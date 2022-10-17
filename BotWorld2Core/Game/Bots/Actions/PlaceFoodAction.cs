@@ -1,4 +1,5 @@
-﻿using BotWorld2Core.Game.General;
+﻿using BotWorld2Core.Game.Bots.Components;
+using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
 using System;
 using System.Collections.Generic;
@@ -11,23 +12,29 @@ namespace BotWorld2Core.Game.Bots.Actions
     class PlaceFoodAction : BotAction
     {
         private IWorldController _world;
-
-        public PlaceFoodAction(IWorldController world)
+        private BotPositionController _pos;
+        private BotStatsController _stats;
+        public PlaceFoodAction(IWorldController world) : base()
         {
             _world = world;
         }
 
         public override void Execute()
         {
-            var targetCell = _world.GetCell(_self.Position + _self.Forward);
-            var healthBugSize = Math.Min(GameSettings.MaxBugPlaceSize, (_self.Health - 1)> 0? _self.Health-1:0); // чтобы бот не мог убить себя таким способом, проверяем его хп
-            var energyBugSize = Math.Min(GameSettings.MaxBugPlaceSize, _self.Energy);
+            var targetCell = _world.GetCell(_pos.Position + _pos.Forward);
+            var healthBugSize = Math.Min(GameSettings.MaxBugPlaceSize, (_stats.Health - 1) > 0 ? _stats.Health - 1 : 0); // чтобы бот не мог убить себя таким способом, проверяем его хп
+            var energyBugSize = Math.Min(GameSettings.MaxBugPlaceSize, _stats.Energy);
 
             targetCell.HealthFoodBug += healthBugSize;
             targetCell.EnergyFoodBug += energyBugSize;
 
-            _self.Health -= healthBugSize;
-            _self.Energy -= energyBugSize;
+            _stats.TakeHit(healthBugSize);
+            _stats.SubtractEnergy(energyBugSize);
+        }
+        public override void ModelCreated()
+        {
+            _pos = _self.GetComponent<BotPositionController>();
+            _stats = _self.GetComponent<BotStatsController>();
         }
     }
 }

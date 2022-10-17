@@ -1,4 +1,5 @@
-﻿using BotWorld2Core.Game.General;
+﻿using BotWorld2Core.Game.Bots.Components;
+using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
 
 namespace BotWorld2Core.Game.Bots.Actions
@@ -6,25 +7,31 @@ namespace BotWorld2Core.Game.Bots.Actions
     public class MoveBotAction : BotAction
     {
         private readonly IWorldController _world;
+        private BotPositionController _pos;
 
-        public MoveBotAction(IWorldController world)
+        public MoveBotAction(IWorldController world) : base()
         {
             _world = world;
         }
-
+        public override void ModelCreated()
+        {
+            _pos = _self.GetComponent<BotPositionController>();
+        }
         public override void Execute()
         {
-            var currentCell = _world.GetCell(_self.Position);
-            var targetCell = _world.GetCell(_self.Position + _self.Forward);
+            var currentCell = _world.GetCell(_pos.Position);
+            var targetCell = _world.GetCell(_pos.Position + _pos.Forward);
             if (targetCell.CanStayHere)
             {
                 currentCell.RemoveBot();
                 targetCell.PlaceBot(_self);
-                _self.Position += _self.Forward;
-                if (_self.Position.Y < 0)
-                    _self.Position.Y = GameSettings.WorldHeight + _self.Position.Y;
-                if (_self.Position.X < 0)
-                    _self.Position.X = GameSettings.WorldWidth + _self.Position.X;
+                var newPos = _pos.Position;
+                newPos += _pos.Forward;
+                if (_pos.Position.Y < 0)
+                    newPos.Y = GameSettings.WorldHeight + _pos.Position.Y;
+                if (_pos.Position.X < 0)
+                    newPos.X = GameSettings.WorldWidth + _pos.Position.X;
+                _pos.SetPosition(newPos);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using BotWorld2Core.Game.Ai;
 using BotWorld2Core.Game.Bots.Actions;
+using BotWorld2Core.Game.Bots.Components;
 using BotWorld2Core.Game.Bots.Scripts;
 using BotWorld2Core.Game.Bots.Sensors;
 using BotWorld2Core.Game.General;
@@ -14,6 +15,7 @@ namespace BotWorld2Core.Game.Bots
     public class BotFabric : IBotFabric
     {
         public event Action<BotModel> BotCreated;
+        public event Action<BotModel> BotRemoved;
 
         private static Type[] neuronsTypes = Assembly.GetExecutingAssembly()
             .GetTypes()
@@ -21,7 +23,6 @@ namespace BotWorld2Core.Game.Bots
             .ToArray();
 
         private Random _random = Global.Random;
-
         private GameCycleController _cycleController;
         private IWorldController _world;
 
@@ -41,6 +42,7 @@ namespace BotWorld2Core.Game.Bots
                     layerNeurons[neuronI] = (Neuron)Activator.CreateInstance(neuronsTypes[_random.Next(0, neuronsTypes.Length)]);
                 layers[i] = new NeuronLayer(layerNeurons);
             }
+            var components = CreateComponents();
             var sensors = CreateSensors();
             var actions = CreateActions();
             var scripts = CreateScripts();
@@ -51,7 +53,8 @@ namespace BotWorld2Core.Game.Bots
             var network = new NeuronNetwork(layers);
             var color = Global.Random.Next(GameSettings.BotColorsCount);
 
-            var bot = new BotModel(_cycleController, network, sensors, actions, scripts, position, Step, color);
+            var bot = new BotModel(_cycleController, network, sensors, actions, scripts, components);
+            SetupComponents(bot, position);
             _world.GetCell(position).PlaceBot(bot);
             return bot;
         }
@@ -59,13 +62,14 @@ namespace BotWorld2Core.Game.Bots
         {
             var parentBrainScheme = parent.Brain.GetScheme();
 
+            var parentPositionController = parent.GetComponent<BotPositionController>();
             //find child position
-            var offset = parent.Forward;
-            var parentPosition = parent.Position;
+            var offset = parentPositionController.Forward;
+            var parentPosition = parentPositionController.Position;
             var positionFound = false;
             for (int i = 0; i < 8; i++)
             {
-                var cell = _world.GetCell(offset + parent.Position);
+                var cell = _world.GetCell(offset + parentPosition);
                 if (cell != null && cell.CanStayHere)
                 {
                     positionFound = true;
@@ -78,7 +82,7 @@ namespace BotWorld2Core.Game.Bots
                 child = null;
                 return false;
             }
-            var childPostion = parent.Position + offset;
+            var childPostion = parentPosition + offset;
 
             //mutate child weights
             var weights = new double[parentBrainScheme.Weights.Length][,];
@@ -113,6 +117,7 @@ namespace BotWorld2Core.Game.Bots
                 }
             }
             //add components
+            var components = CreateComponents();
             var sensors = CreateSensors();
             var actions = CreateActions();
             var scripts = CreateScripts();
@@ -120,15 +125,15 @@ namespace BotWorld2Core.Game.Bots
             var childBrainScheme = new NetworkCreationScheme(weights, neurons);
             var network = new NeuronNetwork(childBrainScheme);
 
-            var color = parent.Color + Global.Random.NextDouble() <= GameSettings.MutationChance? 1:0 * Global.Random.Next(0,2) == 0? -1:1;
-            if (color < 0) 
-                color = 0;
-            else if (color >= GameSettings.BotColorsCount) 
-                color = GameSettings.BotColorsCount - 1;
-
-            child = new BotModel(_cycleController, network, sensors, actions, scripts, childPostion, Step, color);
+            child = new BotModel(_cycleController, network, sensors, actions, scripts, components);
+            SetupComponents(child, childPostion);
             _world.GetCell(childPostion).PlaceBot(child);
             return true;
+        }
+        private void BotDeadHandler(BotModel model)
+        {
+            BotRemoved?.Invoke(model);
+            model.GetComponent<BotStatsController>().OnDead -= BotDeadHandler;
         }
         private void OnChildCreatedHandler(BotModel model)
         {
@@ -161,6 +166,24 @@ namespace BotWorld2Core.Game.Bots
                 new BotDamageDoerScript(),
                 new BotAgingScript()
             };
+        }
+        private BotComponent[] CreateComponents()
+        {
+            return new BotComponent[]
+            {
+                new BotPositionController(),
+                new BotStatistics(),
+                new BotStatsController(_world)
+            };
+        }
+        private void SetupComponents(BotModel bot, Vector2int pos)
+        {
+            var position = bot.GetComponent<BotPositionController>();
+            position.SetPosition(pos);
+            position.SetDirection(new Vector2int(1, 0));
+
+            var stats = bot.GetComponent<BotStatsController>();
+            stats.OnDead += BotDeadHandler;
         }
     }
 }

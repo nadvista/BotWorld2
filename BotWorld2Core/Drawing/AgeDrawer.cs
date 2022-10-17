@@ -1,4 +1,5 @@
-﻿using BotWorld2Core.Game.World;
+﻿using BotWorld2Core.Game.Bots.Components;
+using BotWorld2Core.Game.World;
 
 namespace BotWorld2Core.Drawing
 {
@@ -16,7 +17,7 @@ namespace BotWorld2Core.Drawing
                 return;
             }
 
-            var botAge = cell.GetBot().Age;
+            var botAge = cell.GetBot().GetComponent<BotStatistics>().Age;
             ConsoleColor color = ConsoleColor.White;
 
             if (botAge < 50)

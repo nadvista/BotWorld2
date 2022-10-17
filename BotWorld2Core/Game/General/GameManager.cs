@@ -28,6 +28,7 @@ namespace BotWorld2Core.Game.General
             _gameCycleController = cycleController;
             _fabric = fabric;
             _fabric.BotCreated += AddBot;
+            _fabric.BotRemoved += RemoveBot;
             CreateBots();
         }
 
@@ -55,7 +56,6 @@ namespace BotWorld2Core.Game.General
         public void AddBot(BotModel model)
         {
             _born.Add(model);
-            model.OnDead += BotDead;
         }
         public WorldCell GetCell(Vector2int cellPos) => _worldController.GetCell(cellPos);
         public void Reset()
@@ -68,16 +68,14 @@ namespace BotWorld2Core.Game.General
             CreateBots();
             _scripts.ForEach(e => e.Reset());
         }
-        public T GetScript<T>() where T: Script
+        public T GetScript<T>() where T : Script
         {
             return _scripts.First(e => e is T) as T;
         }
 
-        private void BotDead(BotModel model)
+        public void RemoveBot(BotModel model)
         {
             _dead.Add(model);
-            model.OnDead -= BotDead;
-            _worldController.GetCell(model.Position).RemoveBot();
         }
         private void CreateBots()
         {

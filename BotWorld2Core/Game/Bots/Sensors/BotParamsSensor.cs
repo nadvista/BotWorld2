@@ -1,16 +1,22 @@
-﻿using BotWorld2Core.Game.General;
+﻿using BotWorld2Core.Game.Bots.Components;
+using BotWorld2Core.Game.General;
 
 namespace BotWorld2Core.Game.Bots.Sensors
 {
     public class BotParamsSensor : BotSensor
     {
+        private BotStatsController _stats;
         public override double[] GetData()
         {
-            return new double[] { _self.Health / GameSettings.MaxHealth, _self.Energy / GameSettings.MaxEnergy };
+            return new double[] { _stats.Health / GameSettings.MaxHealth, _stats.Energy / GameSettings.MaxEnergy };
         }
         public override int GetDataSize()
         {
             return 2;
+        }
+        public override void ModelCreated()
+        {
+            _stats = _self.GetComponent<BotStatsController>();
         }
     }
 }

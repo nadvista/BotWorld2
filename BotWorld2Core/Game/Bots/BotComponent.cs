@@ -8,5 +8,6 @@
         {
             _self = self;
         }
+        public virtual void ModelCreated() { }
     }
 }

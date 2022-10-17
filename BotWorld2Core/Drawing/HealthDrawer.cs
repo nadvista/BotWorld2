@@ -1,4 +1,5 @@
-﻿using BotWorld2Core.Game.World;
+﻿using BotWorld2Core.Game.Bots.Components;
+using BotWorld2Core.Game.World;
 
 namespace BotWorld2Core.Drawing
 {
@@ -15,7 +16,7 @@ namespace BotWorld2Core.Drawing
                 Console.Write(' ');
                 return;
             }
-            var health = cell.GetBot().Health;
+            var health = cell.GetBot().GetComponent<BotStatsController>().Health;
             ConsoleColor color = ConsoleColor.White;
 
             if (health < 50)

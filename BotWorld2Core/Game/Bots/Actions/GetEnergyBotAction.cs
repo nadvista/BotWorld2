@@ -1,4 +1,5 @@
-﻿using BotWorld2Core.Game.General;
+﻿using BotWorld2Core.Game.Bots.Components;
+using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
 
 namespace BotWorld2Core.Game.Bots.Actions
@@ -8,21 +9,27 @@ namespace BotWorld2Core.Game.Bots.Actions
         public override bool FreezeThread => false;
 
         private readonly IWorldController _world;
+        private BotPositionController _pos;
+        private BotStatsController _stats;
 
-        public GetEnergyBotAction(IWorldController world)
+        public GetEnergyBotAction(IWorldController world) : base()
         {
             _world = world;
         }
-
+        public override void ModelCreated()
+        {
+            _pos = _self.GetComponent<BotPositionController>();
+            _stats = _self.GetComponent<BotStatsController>();
+        }
         public override void Execute()
         {
-            var cell = _world.GetCell(_self.Position);
+            var cell = _world.GetCell(_pos.Position);
             var bonusEnergy = cell.SunLevel * GameSettings.SunEnergyBonusMultiplyer;
             var bonusHealth = cell.SunLevel * GameSettings.SunEnergyBonusMultiplyer;
 
-            var oldHealth = _self.Health;
-            _self.Energy += bonusEnergy;
-            _self.Health += bonusHealth;
+            var oldHealth = _stats.Health;
+            _stats.AddEnergy(bonusEnergy);
+            _stats.AddHealth(bonusHealth);
         }
     }
 }

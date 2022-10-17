@@ -1,4 +1,5 @@
-﻿using BotWorld2Core.Game.World;
+﻿using BotWorld2Core.Game.Bots.Components;
+using BotWorld2Core.Game.World;
 
 namespace BotWorld2Core.Drawing
 {
@@ -15,7 +16,7 @@ namespace BotWorld2Core.Drawing
                 Console.Write(' ');
                 return;
             }
-            var aggr = cell.GetBot().BotAte;
+            var aggr = cell.GetBot().GetComponent<BotStatistics>().BotAte;
             ConsoleColor color = ConsoleColor.White;
 
             if (aggr < 1)
