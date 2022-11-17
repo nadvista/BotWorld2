@@ -21,11 +21,12 @@ namespace BotWorld2Core.Game.Scripts
 
         public override void Update()
         {
-            var currentShare = 1 - _timer / (float)(_cycleDuration/2);
+            var currentShare = Math.Abs(1 - _timer / (float)(_cycleDuration / 2));
+
             GameSettings.SunShare = currentShare;
 
-            GameSettings.SunEnergyBonusMultiplyer = startEnergyBonus*currentShare;
-            GameSettings.SunHealthBonusMultiplyer = startHealthBonus*currentShare;
+            GameSettings.SunEnergyBonusMultiplyer = startEnergyBonus * currentShare;
+            GameSettings.SunHealthBonusMultiplyer = startHealthBonus * currentShare;
 
             if (_timer != _cycleDuration)
                 _timer++;

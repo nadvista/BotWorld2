@@ -36,6 +36,7 @@ namespace BotWorld2Core.Game.Bots
             BindComponents(sensors);
             BindComponents(actions);
             BindComponents(scripts);
+            BindComponents(components);
 
             foreach (var sens in sensors)
                 sens.ModelCreated();

@@ -15,7 +15,7 @@
         #endregion
 
         #region World
-        public const int WorldWidth = 400, WorldHeight = 80;
+        public const int WorldWidth = 200, WorldHeight = 80;
         #endregion
 
         #region Rules
@@ -30,7 +30,7 @@
 
         public static int ChildEnergyCost = 10;
         public static float MutationChance = .05f;
-        
+
         public static int StartBotsCount = 2000;
 
         public static int FoodMaxCount = 3000;
