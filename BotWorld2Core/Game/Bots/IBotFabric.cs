@@ -1,10 +1,5 @@
-﻿using BotWorld2Core.Game.General;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System;
+using BotWorld2Core.Game.General;
 namespace BotWorld2Core.Game.Bots
 {
     public interface IBotFabric

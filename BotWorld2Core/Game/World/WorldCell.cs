@@ -12,15 +12,19 @@ namespace BotWorld2Core.Game.World
         public bool CanStayHere => !IsWall && !HasBot;
 
         public ObservableVar<bool> HasFood { get; private set; }
-        public float HealthFoodBug { get => _healthBug; 
+        public float HealthFoodBug
+        {
+            get => _healthBug;
             set
             {
                 _healthBug = Math.Max(0, value);
                 Updated?.Invoke(this);
             }
         }
-        public float EnergyFoodBug { get => _energyBug;
-            set 
+        public float EnergyFoodBug
+        {
+            get => _energyBug;
+            set
             {
                 _energyBug = Math.Max(0, value);
                 Updated?.Invoke(this);

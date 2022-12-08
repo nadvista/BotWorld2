@@ -1,9 +1,8 @@
 ﻿using BotWorld2Core.Game.Bots;
-using BotWorld2Core.Game.Scripts;
 using BotWorld2Core.Game.World;
-using BotWorld2Core.Game.World.Schemes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BotWorld2Core.Game.General
 {

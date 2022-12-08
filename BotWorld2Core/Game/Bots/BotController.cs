@@ -1,8 +1,6 @@
-﻿using BotWorld2Core.Game.Bots.Actions;
-using BotWorld2Core.Game.General;
+﻿using BotWorld2Core.Game.General;
 using System;
 using System.Linq;
-using System.Threading;
 
 namespace BotWorld2Core.Game.Bots
 {
@@ -41,12 +39,6 @@ namespace BotWorld2Core.Game.Bots
         {
             if (!_lastActionExecuted)
             {
-                if (_lastAction == null)
-                {
-                    var thread = Thread.CurrentThread;
-                    var threadHash = thread.GetHashCode();
-                    var threadId = thread.ManagedThreadId;
-                }
                 _lastAction.Execute();
             }
             for (int i = 0; i < _model.Scripts.Length; i++)

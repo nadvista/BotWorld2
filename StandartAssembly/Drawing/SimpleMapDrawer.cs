@@ -1,0 +1,37 @@
+﻿using BotWorld2Core.Game.World;
+using System;
+
+namespace StandartAssembly.Drawing
+{
+    internal class SimpleMapDrawer : GameDrawer
+    {
+        public SimpleMapDrawer() : base("Simple map ---------------")
+        {
+        }
+
+        public override void Draw(WorldCell cell)
+        {
+            if (cell.IsWall)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write('#');
+            }
+            else if (cell.HasBot)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write('B');
+            }
+            else if (cell.HasFood.Value)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write('F');
+            }
+            else if (cell.HealthFoodBug > 0 || cell.EnergyFoodBug > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write('@');
+            }
+            else Console.Write(' ');
+        }
+    }
+}

@@ -1,0 +1,42 @@
+﻿using BotWorld2Core.Game;
+using BotWorld2Core.Game.General;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace StandartAssembly.Scripts
+{
+    public class SunScript : Script
+    {
+        private readonly float startEnergyBonus = GameSettings.SunEnergyBonusMultiplyer;
+        private readonly float startHealthBonus = GameSettings.SunHealthBonusMultiplyer;
+
+        private int _timer = 0;
+        private int _cycleDuration = 1500;
+
+        public SunScript()
+        {
+        }
+
+        public override void Update()
+        {
+            var currentShare = Math.Abs(1 - _timer / (float)(_cycleDuration / 2));
+
+            GameSettings.SunShare = currentShare;
+
+            GameSettings.SunEnergyBonusMultiplyer = startEnergyBonus * currentShare;
+            GameSettings.SunHealthBonusMultiplyer = startHealthBonus * currentShare;
+
+            if (_timer != _cycleDuration)
+                _timer++;
+        }
+        public override void Reset()
+        {
+            GameSettings.SunEnergyBonusMultiplyer = startEnergyBonus;
+            GameSettings.SunHealthBonusMultiplyer = startHealthBonus;
+            _timer = 0;
+        }
+    }
+}

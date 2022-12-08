@@ -1,7 +1,4 @@
 ﻿using BotWorld2Core.Game.Ai;
-using BotWorld2Core.Game.Bots.Actions;
-using BotWorld2Core.Game.Bots.Scripts;
-using BotWorld2Core.Game.Bots.Sensors;
 using BotWorld2Core.Game.General;
 using System;
 using System.Linq;

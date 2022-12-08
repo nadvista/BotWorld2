@@ -1,4 +1,7 @@
-﻿namespace BotWorld2Core.Game.General
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace BotWorld2Core.Game.General
 {
     public class GameCycleController
     {
@@ -17,14 +20,19 @@
         public void Update()
         {
             List<Task> tasks = new List<Task>(_updatables.Count);
-            foreach (var updatable in _updatables)
+            for (int i = 0; i < _updatables.Count; i++)
             {
+                var updatable = _updatables[i];
                 var updatableArgument = updatable;
                 var task = Task.Run(() => updatableArgument.ThreadUpdate());
+
                 tasks.Add(task);
             }
             Task.WaitAll(tasks.ToArray());
-            _updatables.ForEach(e => e.Update());
+            for (int i = 0; i < _updatables.Count; i++)
+            {
+                _updatables[i].Update();
+            }
 
             foreach (var remove in _toRemove)
                 _updatables.Remove(remove);
