@@ -1,5 +1,4 @@
 using BotWorld2Core.Game.General;
-using System;
 
 namespace BotWorld2Core.Game.Ai
 {
@@ -7,7 +6,7 @@ namespace BotWorld2Core.Game.Ai
     {
         public int Length => _neurons.Length;
 
-        private Neuron[] _neurons;
+        private readonly Neuron[] _neurons;
         private double[,] _weights;
         private NeuronLayer _nextLayer;
 

@@ -1,10 +1,11 @@
-﻿using StandartAssembly.Drawing;
-using StandartAssembly.Bots;
+﻿using BotWorld2.StandartAssembly;
 using BotWorld2Core.Game.General;
+using BotWorld2Core.Game.World;
+using StandartAssembly.Bots;
+using StandartAssembly.Drawing;
 using StandartAssembly.Scripts;
 using StandartAssembly.World;
 using StandartAssembly.World.Schemes;
-using BotWorld2Core.Game.World;
 
 namespace StandartAssembly
 {
@@ -15,11 +16,11 @@ namespace StandartAssembly
         private StepsCounterScript _stepsCounter;
         private GameCycleController _cycleController;
 
-        private List<GameDrawer> _drawers = new List<GameDrawer>();
+        private readonly List<GameDrawer> _drawers = new List<GameDrawer>();
         private GameDrawer _currentDrawer => _drawers[_currentDrawerIndex];
         private int _currentDrawerIndex;
 
-        private Dictionary<ConsoleKey, Action> _handlers = new Dictionary<ConsoleKey, Action>();
+        private readonly Dictionary<ConsoleKey, Action> _handlers = new Dictionary<ConsoleKey, Action>();
 
         private bool _showOutput = true;
         private bool _pause = false;

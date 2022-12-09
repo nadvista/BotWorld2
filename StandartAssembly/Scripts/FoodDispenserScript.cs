@@ -1,18 +1,14 @@
-﻿using BotWorld2Core.Game;
+﻿using BotWorld2.StandartAssembly;
+using BotWorld2Core.Game;
 using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StandartAssembly.Scripts
 {
     internal class FoodDispenserScript : Script
     {
         private int _foodCount = 0;
-        private IWorldController _world;
+        private readonly IWorldController _world;
 
         public FoodDispenserScript(IWorldController world)
         {

@@ -1,4 +1,4 @@
-﻿namespace BotWorld2Core.Game.General
+﻿namespace BotWorld2.StandartAssembly
 {
     public class GameSettings
     {

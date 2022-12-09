@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace BotWorld2Core.Game.General
+﻿namespace BotWorld2Core.Game.General
 {
     public class GameCycleController
     {
-        private List<Updatable> _updatables = new List<Updatable>();
-        private List<Updatable> _toRemove = new List<Updatable>();
-        private List<Updatable> _toAdd = new List<Updatable>();
+        private readonly List<Updatable> _updatables = new List<Updatable>();
+        private readonly List<Updatable> _toRemove = new List<Updatable>();
+        private readonly List<Updatable> _toAdd = new List<Updatable>();
 
         public void AddUpdatable(Updatable updatable)
         {

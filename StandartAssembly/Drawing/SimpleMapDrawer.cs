@@ -1,5 +1,4 @@
 ﻿using BotWorld2Core.Game.World;
-using System;
 
 namespace StandartAssembly.Drawing
 {

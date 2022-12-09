@@ -1,13 +1,12 @@
 ﻿using BotWorld2Core.Game.Bots;
 using BotWorld2Core.Game.World;
 using StandartAssembly.Bots.Components;
-using System.Collections.Generic;
 
 namespace StandartAssembly.Bots.Sensors
 {
     public class EyeSensor : BotSensor
     {
-        private IWorldController _world;
+        private readonly IWorldController _world;
         private BotPositionController _pos;
 
         public EyeSensor(IWorldController world) : base()

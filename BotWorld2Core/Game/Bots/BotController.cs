@@ -1,6 +1,4 @@
 ﻿using BotWorld2Core.Game.General;
-using System;
-using System.Linq;
 
 namespace BotWorld2Core.Game.Bots
 {
@@ -8,7 +6,7 @@ namespace BotWorld2Core.Game.Bots
     {
         private BotAction _lastAction;
         private bool _lastActionExecuted;
-        private BotModel _model;
+        private readonly BotModel _model;
 
         public BotController(GameCycleController cycle, BotModel model) : base(cycle)
         {

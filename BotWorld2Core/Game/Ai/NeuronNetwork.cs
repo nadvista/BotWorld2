@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace BotWorld2Core.Game.Ai
 {
     public class NeuronNetwork
@@ -11,8 +7,8 @@ namespace BotWorld2Core.Game.Ai
         public readonly int InputLayerLength;
         public readonly int OutputLayerLength;
 
-        private NeuronLayer[] _layers;
-        private Dictionary<string, double[]> _memory = new Dictionary<string, double[]>(300);
+        private readonly NeuronLayer[] _layers;
+        private readonly Dictionary<string, double[]> _memory = new Dictionary<string, double[]>(300);
 
         public NeuronNetwork(params NeuronLayer[] layers)
         {
@@ -81,7 +77,7 @@ namespace BotWorld2Core.Game.Ai
             var output = _layers[^1].GetLayerOutput();
 
             if (_memory.Count < MAX_MEMORY_LEN && !_memory.ContainsKey(key))
-                _memory.Add(key, (double[])output);
+                _memory.Add(key, output);
 
             return output;
         }

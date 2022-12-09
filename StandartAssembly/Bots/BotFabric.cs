@@ -1,4 +1,5 @@
-﻿using BotWorld2Core.Game.Ai;
+﻿using BotWorld2.StandartAssembly;
+using BotWorld2Core.Game.Ai;
 using BotWorld2Core.Game.Bots;
 using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
@@ -6,8 +7,6 @@ using StandartAssembly.Bots.Actions;
 using StandartAssembly.Bots.Components;
 using StandartAssembly.Bots.Scripts;
 using StandartAssembly.Bots.Sensors;
-using System;
-using System.Linq;
 using System.Reflection;
 
 namespace StandartAssembly.Bots
@@ -17,14 +16,14 @@ namespace StandartAssembly.Bots
         public event Action<BotModel> BotCreated;
         public event Action<BotModel> BotRemoved;
 
-        private static Type[] neuronsTypes = Assembly.GetExecutingAssembly()
+        private static readonly Type[] neuronsTypes = Assembly.GetExecutingAssembly()
             .GetTypes()
             .Where(e => typeof(Neuron).IsAssignableFrom(e))
             .ToArray();
 
-        private Random _random = Global.Random;
-        private GameCycleController _cycleController;
-        private IWorldController _world;
+        private readonly Random _random = Global.Random;
+        private readonly GameCycleController _cycleController;
+        private readonly IWorldController _world;
 
         public BotFabric(IWorldController worldController, GameCycleController cycleController)
         {

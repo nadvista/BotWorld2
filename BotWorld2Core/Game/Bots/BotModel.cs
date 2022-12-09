@@ -1,7 +1,5 @@
 ﻿using BotWorld2Core.Game.Ai;
 using BotWorld2Core.Game.General;
-using System;
-using System.Linq;
 
 namespace BotWorld2Core.Game.Bots
 {

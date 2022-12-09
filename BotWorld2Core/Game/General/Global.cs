@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BotWorld2Core.Game.General
+﻿namespace BotWorld2Core.Game.General
 {
     public class Global
     {

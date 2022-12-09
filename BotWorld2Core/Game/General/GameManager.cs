@@ -1,8 +1,6 @@
-﻿using BotWorld2Core.Game.Bots;
+﻿using BotWorld2.StandartAssembly;
+using BotWorld2Core.Game.Bots;
 using BotWorld2Core.Game.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BotWorld2Core.Game.General
 {
@@ -15,10 +13,10 @@ namespace BotWorld2Core.Game.General
         private readonly GameCycleController _gameCycleController;
         private readonly IBotFabric _fabric;
 
-        private List<BotModel> _bots = new List<BotModel>();
-        private List<BotModel> _born = new List<BotModel>();
-        private List<BotModel> _dead = new List<BotModel>();
-        private List<Script> _scripts = new List<Script>();
+        private readonly List<BotModel> _bots = new List<BotModel>();
+        private readonly List<BotModel> _born = new List<BotModel>();
+        private readonly List<BotModel> _dead = new List<BotModel>();
+        private readonly List<Script> _scripts = new List<Script>();
 
         public GameManager(IWorldController world, GameCycleController cycleController, IBotFabric fabric)
         {

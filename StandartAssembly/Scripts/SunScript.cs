@@ -1,10 +1,5 @@
-﻿using BotWorld2Core.Game;
-using BotWorld2Core.Game.General;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BotWorld2.StandartAssembly;
+using BotWorld2Core.Game;
 
 namespace StandartAssembly.Scripts
 {
@@ -14,7 +9,7 @@ namespace StandartAssembly.Scripts
         private readonly float startHealthBonus = GameSettings.SunHealthBonusMultiplyer;
 
         private int _timer = 0;
-        private int _cycleDuration = 1500;
+        private readonly int _cycleDuration = 1500;
 
         public SunScript()
         {

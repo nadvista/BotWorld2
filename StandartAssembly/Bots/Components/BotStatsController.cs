@@ -1,5 +1,5 @@
+using BotWorld2.StandartAssembly;
 using BotWorld2Core.Game.Bots;
-using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
 
 namespace StandartAssembly.Bots.Components
@@ -9,7 +9,7 @@ namespace StandartAssembly.Bots.Components
         public event Action<BotModel> OnDead;
         public float Health { get; private set; } = GameSettings.StartHealth;
         public float Energy { get; private set; } = GameSettings.StartEnergy;
-        private IWorldController _worldController;
+        private readonly IWorldController _worldController;
 
         public BotStatsController(IWorldController worldController) : base()
         {

@@ -1,5 +1,4 @@
 using BotWorld2Core.Game.Bots;
-using BotWorld2Core.Game.General;
 
 namespace StandartAssembly.Bots.Components
 {

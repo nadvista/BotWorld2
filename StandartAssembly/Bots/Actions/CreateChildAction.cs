@@ -1,13 +1,13 @@
-﻿using BotWorld2Core.Game.Bots;
-using BotWorld2Core.Game.General;
+﻿using BotWorld2.StandartAssembly;
+using BotWorld2Core.Game.Bots;
 using StandartAssembly.Bots.Components;
 
 namespace StandartAssembly.Bots.Actions
 {
     public class CreateChildAction : BotAction
     {
-        private IBotFabric _fabric;
-        private Action<BotModel> _onCreated;
+        private readonly IBotFabric _fabric;
+        private readonly Action<BotModel> _onCreated;
         private BotStatsController _stats;
 
         public CreateChildAction(IBotFabric fabric, Action<BotModel> createdChildHandler) : base()

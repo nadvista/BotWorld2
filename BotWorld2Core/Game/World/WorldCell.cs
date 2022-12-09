@@ -1,6 +1,5 @@
 ﻿using BotWorld2Core.Game.Bots;
 using BotWorld2Core.Game.General;
-using System;
 
 namespace BotWorld2Core.Game.World
 {

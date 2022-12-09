@@ -1,4 +1,4 @@
-﻿using BotWorld2Core.Game.General;
+﻿using BotWorld2.StandartAssembly;
 using BotWorld2Core.Game.World;
 
 namespace StandartAssembly.Drawing

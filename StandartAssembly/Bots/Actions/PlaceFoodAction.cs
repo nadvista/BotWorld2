@@ -1,18 +1,13 @@
-﻿using BotWorld2Core.Game.Bots;
-using BotWorld2Core.Game.General;
+﻿using BotWorld2.StandartAssembly;
+using BotWorld2Core.Game.Bots;
 using BotWorld2Core.Game.World;
 using StandartAssembly.Bots.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StandartAssembly.Bots.Actions
 {
-    class PlaceFoodAction : BotAction
+    internal class PlaceFoodAction : BotAction
     {
-        private IWorldController _world;
+        private readonly IWorldController _world;
         private BotPositionController _pos;
         private BotStatsController _stats;
         public PlaceFoodAction(IWorldController world) : base()

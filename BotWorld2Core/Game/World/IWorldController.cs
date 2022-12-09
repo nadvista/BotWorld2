@@ -1,5 +1,4 @@
-﻿using System;
-using BotWorld2Core.Game.General;
+﻿using BotWorld2Core.Game.General;
 
 namespace BotWorld2Core.Game.World
 {
