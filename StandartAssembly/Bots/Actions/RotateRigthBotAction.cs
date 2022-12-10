@@ -14,7 +14,9 @@ namespace StandartAssembly.Bots.Actions
 
         public override void Execute()
         {
-            _pos.Forward.RotateRight();
+            var rotation = _pos.Forward;
+            rotation.RotateRight();
+            _pos.SetDirection(rotation);
         }
     }
 }

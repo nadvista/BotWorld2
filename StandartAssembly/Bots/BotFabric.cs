@@ -53,8 +53,8 @@ namespace StandartAssembly.Bots
             var color = Global.Random.Next(GameSettings.BotColorsCount);
 
             var bot = new BotModel(_cycleController, network, sensors, actions, scripts, components);
+            bot.Enable();
             SetupComponents(bot, position);
-            _world.GetCell(position).PlaceBot(bot);
             return bot;
         }
         public bool CreateChild(BotModel parent, out BotModel child, int Step = 0)
@@ -126,7 +126,7 @@ namespace StandartAssembly.Bots
 
             child = new BotModel(_cycleController, network, sensors, actions, scripts, components);
             SetupComponents(child, childPostion);
-            _world.GetCell(childPostion).PlaceBot(child);
+            child.Enable();
             return true;
         }
         private void BotDeadHandler(BotModel model)
@@ -163,14 +163,14 @@ namespace StandartAssembly.Bots
             return new BotScript[]
             {
                 new BotDamageDoerScript(),
-                new BotAgingScript()
+                new BotAgingScript(),
             };
         }
         private BotComponent[] CreateComponents()
         {
             return new BotComponent[]
             {
-                new BotPositionController(),
+                new BotPositionController(_world),
                 new BotStatistics(),
                 new BotStatsController(_world)
             };

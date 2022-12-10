@@ -23,13 +23,12 @@ namespace StandartAssembly.World
         }
         public WorldCell GetCell(Vector2int pos)
         {
-            if (pos.X < 0)
-                pos.X = Width + pos.X;
-            if (pos.Y < 0)
-                pos.Y = Height + pos.Y;
-            pos.X %= Width;
-            pos.Y %= Height;
-            return _world[pos.X, pos.Y];
+            var pos2 = pos;
+            pos2.X += Width;
+            pos2.X %= Width;
+            pos2.Y += Height;
+            pos2.Y %= Height;
+            return _world[pos2.X, pos2.Y];
         }
         public void Reset()
         {
@@ -53,6 +52,14 @@ namespace StandartAssembly.World
                     _world[x, y] = cell;
                 }
             }
+        }
+        public int GetRealBotsCount()
+        {
+            var count = 0;
+            foreach (var cell in _world)
+                if (cell.HasBot)
+                    count++;
+            return count;
         }
     }
 }

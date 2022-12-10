@@ -14,6 +14,7 @@ namespace StandartAssembly
     {
         private BotWorldManager _manager;
         private StepsCounterScript _stepsCounter;
+        private WorldController world;
 
         private readonly List<GameDrawer> _drawers = new List<GameDrawer>();
         private GameDrawer _currentDrawer => _drawers[_currentDrawerIndex];
@@ -26,7 +27,7 @@ namespace StandartAssembly
 
         public void Run()
         {
-            var world = new WorldController(new IslandCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
+            world = new WorldController(new IslandCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
             var cycleController = new GameCycleController();
             _manager = new BotWorldManager(world, cycleController, new BotFabric(world, cycleController));
             _stepsCounter = new StepsCounterScript();
@@ -51,6 +52,7 @@ namespace StandartAssembly
             _handlers.Add(ConsoleKey.DownArrow, SelectPreviousDrawer);
             _handlers.Add(ConsoleKey.Q, SwitchOutputMode);
             _handlers.Add(ConsoleKey.P, SwitchPause);
+            _handlers.Add(ConsoleKey.R, GetRealCount);
         }
         private void AddDrawers()
         {
@@ -119,6 +121,10 @@ namespace StandartAssembly
         private void SwitchPause()
         {
             _pause = !_pause;
+        }
+        private void GetRealCount()
+        {
+            var count = world.GetRealBotsCount();
         }
         private void WriteInfo()
         {

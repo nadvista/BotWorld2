@@ -5,12 +5,17 @@ namespace BotWorld2Core.Game.Bots
 {
     public class BotModel
     {
+        public readonly Guid Id = Guid.NewGuid();
         public readonly NeuronNetwork Brain;
         public readonly BotSensor[] Sensors;
         public readonly BotAction[] Actions;
         public readonly BotScript[] Scripts;
         public readonly BotComponent[] Components;
         public readonly BotController Controller;
+
+        public bool Enabled => _enabled;
+
+        private bool _enabled;
 
         public BotModel(GameCycleController cycleController, NeuronNetwork brain, BotSensor[] sensors, BotAction[] actions, BotScript[] scripts, BotComponent[] components)
         {
@@ -43,6 +48,8 @@ namespace BotWorld2Core.Game.Bots
             Controller = new BotController(cycleController, this);
         }
         public T GetComponent<T>() where T : BotComponent => (T)Components.First(e => e is T);
+        public void Enable() => _enabled = true;
+        public void Disable() => _enabled = false;
 
         private void BindComponents(BotComponent[] components)
         {

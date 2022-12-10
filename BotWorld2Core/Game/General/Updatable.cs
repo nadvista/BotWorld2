@@ -20,6 +20,9 @@
         public abstract void ThreadUpdate();
         public abstract void Update();
 
-        protected void RemoveUpdatable() => _gameCycleController.RemoveUpdatable(this);
+        protected void RemoveUpdatable()
+        {
+            _gameCycleController.RemoveUpdatable(this);
+        }
     }
 }

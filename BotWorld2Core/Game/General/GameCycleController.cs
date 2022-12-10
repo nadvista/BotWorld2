@@ -16,27 +16,18 @@
         }
         public void Update()
         {
-            List<Task> tasks = new List<Task>(_updatables.Count);
-            for (int i = 0; i < _updatables.Count; i++)
-            {
-                var updatable = _updatables[i];
-                var updatableArgument = updatable;
-                var task = Task.Run(() => updatableArgument.ThreadUpdate());
-
-                tasks.Add(task);
-            }
-            Task.WaitAll(tasks.ToArray());
-            for (int i = 0; i < _updatables.Count; i++)
-            {
-                _updatables[i].Update();
-            }
-
             foreach (var remove in _toRemove)
                 _updatables.Remove(remove);
             _toRemove.Clear();
             foreach (var add in _toAdd)
                 _updatables.Add(add);
             _toAdd.Clear();
+
+            Parallel.ForEach<Updatable>(_updatables, e => e.ThreadUpdate());
+            for (int i = 0; i < _updatables.Count; i++)
+            {
+                _updatables[i].Update();
+            }
         }
     }
 }

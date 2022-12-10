@@ -52,7 +52,7 @@ namespace BotWorld2Core.Game.World
             _currentBot = model;
             Updated?.Invoke(this);
         }
-        public void RemoveBot()
+        public void RemoveBot(BotModel model)
         {
             _currentBot = null;
             Updated?.Invoke(this);

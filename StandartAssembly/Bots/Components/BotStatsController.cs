@@ -23,8 +23,10 @@ namespace StandartAssembly.Bots.Components
             if (Health == 0)
             {
                 OnDead?.Invoke(_self);
+                _self.Disable();
                 _self.Controller.Remove();
-                _worldController.GetCell(_self.GetComponent<BotPositionController>().Position).RemoveBot();
+                var bot = _worldController.GetCell(_self.GetComponent<BotPositionController>().Position).GetBot();
+                _worldController.GetCell(_self.GetComponent<BotPositionController>().Position).RemoveBot(_self);
             }
         }
         public void AddHealth(float value)

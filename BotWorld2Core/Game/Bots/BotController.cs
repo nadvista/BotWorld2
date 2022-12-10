@@ -15,12 +15,16 @@ namespace BotWorld2Core.Game.Bots
 
         public override void ThreadUpdate()
         {
+            if (!_model.Enabled)
+                return;
+
             _lastActionExecuted = false;
 
             var datas = GetSensorsData();
             var answer = GetBrainAnswer(datas);
 
             var index = Array.IndexOf(answer, answer.Max());
+
             _lastAction = _model.Actions[index];
 
             if (!_lastAction.FreezeThread)
@@ -35,12 +39,20 @@ namespace BotWorld2Core.Game.Bots
         }
         public override void Update()
         {
+            if (!_model.Enabled)
+                return;
+
             if (!_lastActionExecuted)
             {
                 _lastAction.Execute();
             }
+
             for (int i = 0; i < _model.Scripts.Length; i++)
+            {
+                if (!_model.Enabled)
+                    return;
                 _model.Scripts[i].Update();
+            }
         }
 
         private double[] GetBrainAnswer(double[] inputs) => _model.Brain.Calculate(inputs);

@@ -55,11 +55,13 @@ namespace BotWorld2.StandartAssembly.App
             {
                 //find free cell
                 int x = 0, y = 0;
+                WorldCell cell;
                 do
                 {
                     x = Global.Random.Next(0, _worldController.Width);
                     y = Global.Random.Next(0, _worldController.Height);
-                } while (!_worldController.GetCell(new Vector2int(x, y)).CanStayHere);
+                    cell = _worldController.GetCell(new Vector2int(x, y));
+                } while (!cell.CanStayHere);
                 //creating bot
                 var bot = _fabric.CreateRandom(new Vector2int(x, y));
                 AddBot(bot);
