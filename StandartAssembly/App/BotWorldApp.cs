@@ -1,4 +1,5 @@
 ﻿using BotWorld2.StandartAssembly;
+using BotWorld2.StandartAssembly.App;
 using BotWorld2Core.Game.General;
 using BotWorld2Core.Game.World;
 using StandartAssembly.Bots;
@@ -11,10 +12,8 @@ namespace StandartAssembly
 {
     public class BotWordlApp
     {
-        private WorldController _world;
-        private GameManager _manager;
+        private BotWorldManager _manager;
         private StepsCounterScript _stepsCounter;
-        private GameCycleController _cycleController;
 
         private readonly List<GameDrawer> _drawers = new List<GameDrawer>();
         private GameDrawer _currentDrawer => _drawers[_currentDrawerIndex];
@@ -27,16 +26,16 @@ namespace StandartAssembly
 
         public void Run()
         {
-            _world = new WorldController(new IslandCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
-            _cycleController = new GameCycleController();
-            _manager = new GameManager(_world, _cycleController, new BotFabric(_world, _cycleController));
+            var world = new WorldController(new IslandCreationScheme(), new Vector2int(GameSettings.WorldWidth, GameSettings.WorldHeight));
+            var cycleController = new GameCycleController();
+            _manager = new BotWorldManager(world, cycleController, new BotFabric(world, cycleController));
             _stepsCounter = new StepsCounterScript();
 
             _manager.OnCellUpdated += RedrawCell;
             SetupConsole();
 
             _manager.AddScript(new SunScript());
-            _manager.AddScript(new FoodDispenserScript(_world));
+            _manager.AddScript(new FoodDispenserScript(world));
             _manager.AddScript(_stepsCounter);
 
             AddDrawers();
