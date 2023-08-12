@@ -1,4 +1,5 @@
-﻿using BotWorld2.StandartAssembly;
+﻿using System;
+using BotWorld2.StandartAssembly;
 using BotWorld2Core.Game.Bots;
 using BotWorld2Core.Game.World;
 using StandartAssembly.Bots.Components;

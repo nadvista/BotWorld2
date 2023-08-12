@@ -1,3 +1,4 @@
+using System;
 using BotWorld2Core.Game.Bots;
 
 namespace StandartAssembly.Bots.Components

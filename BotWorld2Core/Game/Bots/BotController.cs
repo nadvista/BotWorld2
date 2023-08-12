@@ -8,7 +8,7 @@ namespace BotWorld2Core.Game.Bots
     {
         private BotAction _lastAction;
         private bool _lastActionExecuted;
-        private readonly BotModel _model;
+        private BotModel _model;
 
         public BotController(GameCycleController cycle, BotModel model) : base(cycle)
         {

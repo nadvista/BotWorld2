@@ -1,4 +1,5 @@
-﻿using BotWorld2Core.Game.Bots;
+﻿using System.Collections.Generic;
+using BotWorld2Core.Game.Bots;
 using BotWorld2Core.Game.World;
 using StandartAssembly.Bots.Components;
 

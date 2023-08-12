@@ -1,4 +1,5 @@
-﻿using BotWorld2.StandartAssembly;
+﻿using System;
+using BotWorld2.StandartAssembly;
 using BotWorld2Core.Game;
 
 namespace StandartAssembly.Scripts
