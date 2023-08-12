@@ -1,3 +1,5 @@
+using System;
+
 namespace BotWorld2Core.Game.Ai
 {
     public struct NetworkCreationScheme

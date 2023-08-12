@@ -1,8 +1,11 @@
+using BotWorld2Core.Game.General.Pool;
+
 namespace BotWorld2Core.Game.Ai
 {
-    public class Neuron
+    public class Neuron : IPoolElement
     {
         private double _lastValue;
+        private bool _isFree;
 
         public virtual double Activate()
         {
@@ -12,9 +15,31 @@ namespace BotWorld2Core.Game.Ai
         {
             _lastValue += value;
         }
+
+        public bool IsElementFree()
+        {
+            return _isFree;
+        }
+
+        public void OnCreate()
+        {
+            _isFree = true;
+        }
+
+        public void OnTake()
+        {
+            Reset();
+            _isFree = false;
+        }
+
         public void Reset()
         {
             _lastValue = 0;
+        }
+
+        public void ReturnToPool()
+        {
+            _isFree = true;
         }
     }
 }

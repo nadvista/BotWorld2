@@ -1,4 +1,5 @@
-﻿using BotWorld2Core.Game.General;
+﻿using System;
+using BotWorld2Core.Game.General;
 namespace BotWorld2Core.Game.Bots
 {
     public interface IBotFabric

@@ -1,34 +1,31 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using BotWorld2Core.Game.General.Pool;
+
 namespace BotWorld2Core.Game.Ai
 {
-    public class NeuronNetwork
+    public class NeuronNetwork : IPoolElement
     {
+        private static Pool<Neuron> _neuronsPool = new Pool<Neuron>(new NeuronsFabric(), 10000);
+        private static Pool<RandomNeuron> _randomNeuronsPool = new Pool<RandomNeuron>(new RandomNeuronsFabric(), 10000);
+        private static Pool<NeuronLayer> _neuronLayersPool = new Pool<NeuronLayer>(new NeuronLayerFabric(), 10000);
+
         private const int MAX_MEMORY_LEN = 300;
 
-        public readonly int InputLayerLength;
-        public readonly int OutputLayerLength;
+        public int InputLayerLength { get; private set; }
+        public int OutputLayerLength { get; private set; }
 
-        private readonly NeuronLayer[] _layers;
-        private readonly Dictionary<string, double[]> _memory = new Dictionary<string, double[]>(300);
+        private NeuronLayer[] _layers;
+        private Dictionary<string, double[]> _memory = new Dictionary<string, double[]>(300);
+        private bool _isFree;
 
-        public NeuronNetwork(params NeuronLayer[] layers)
-        {
-            if (layers.Length < 2)
-                throw new ArgumentException();
-
-            _layers = new NeuronLayer[layers.Length];
-
-            for (int i = 0; i < layers.Length - 1; i++)
-            {
-                var currentLayer = layers[i];
-                var nextLayer = layers[i + 1];
-                currentLayer.SetNextLayer(nextLayer);
-                _layers[i] = currentLayer;
-            }
-            _layers[^1] = layers[^1];
-            InputLayerLength = _layers[0].Length;
-            OutputLayerLength = _layers[^1].Length;
-        }
+        public NeuronNetwork() {}
         public NeuronNetwork(NetworkCreationScheme scheme)
+        {
+            Setup(scheme);
+        }
+        public void Setup(NetworkCreationScheme scheme)
         {
             _layers = new NeuronLayer[scheme.NeuronTypes.Length];
             //creating layers
@@ -37,9 +34,13 @@ namespace BotWorld2Core.Game.Ai
                 var layerNeurons = new Neuron[scheme.NeuronTypes[layerIndex].Length];
                 for (int neuronIndex = 0; neuronIndex < layerNeurons.Length; neuronIndex++)
                 {
-                    layerNeurons[neuronIndex] = (Neuron)Activator.CreateInstance(scheme.NeuronTypes[layerIndex][neuronIndex]);
+                    //layerNeurons[neuronIndex] = (Neuron)Activator.CreateInstance(scheme.NeuronTypes[layerIndex][neuronIndex]);
+                    var neuron = scheme.NeuronTypes[layerIndex][neuronIndex] == typeof(Neuron) ? _neuronsPool.Take() : _randomNeuronsPool.Take();
+                    layerNeurons[neuronIndex] = neuron;
                 }
-                _layers[layerIndex] = new NeuronLayer(layerNeurons);
+                var layer = _neuronLayersPool.Take();
+                layer.Setup(layerNeurons);
+                _layers[layerIndex] = layer;
             }
             //binding layers
             for (int layerIndex = 0; layerIndex < _layers.Length - 1; layerIndex++)
@@ -53,7 +54,6 @@ namespace BotWorld2Core.Game.Ai
             OutputLayerLength = _layers[^1].Length;
             ImportWeights(scheme.Weights);
         }
-
         public double[] Calculate(double[] input)
         {
             var key = string.Join("", input);
@@ -109,6 +109,28 @@ namespace BotWorld2Core.Game.Ai
                     neuronsTypes[layerIndex][neuronIndex] = layer.GetNeuronType(neuronIndex);
             }
             return new NetworkCreationScheme(ExportWeights(), neuronsTypes);
+        }
+
+        public bool IsElementFree()
+        {
+            return _isFree;
+        }
+
+        public void OnCreate()
+        {
+            _isFree = true;
+        }
+
+        public void OnTake()
+        {
+            _isFree = false;
+        }
+
+        public void ReturnToPool()
+        {
+            _isFree = true;
+            foreach(var layer in _layers)
+                layer.ReturnToPool();
         }
     }
 }

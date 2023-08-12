@@ -1,4 +1,8 @@
-﻿namespace BotWorld2Core.Game.General
+﻿using System.Threading.Tasks;
+
+using System.Collections.Generic;
+
+namespace BotWorld2Core.Game.General
 {
     public class GameCycleController
     {

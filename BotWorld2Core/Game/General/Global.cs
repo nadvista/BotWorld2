@@ -1,4 +1,6 @@
-﻿namespace BotWorld2Core.Game.General
+﻿using System;
+
+namespace BotWorld2Core.Game.General
 {
     public class Global
     {

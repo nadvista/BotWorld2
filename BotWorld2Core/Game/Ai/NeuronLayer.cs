@@ -1,15 +1,19 @@
+using System;
 using BotWorld2Core.Game.General;
+using BotWorld2Core.Game.General.Pool;
 
 namespace BotWorld2Core.Game.Ai
 {
-    public class NeuronLayer
+    public class NeuronLayer : IPoolElement
     {
         public int Length => _neurons.Length;
 
-        private readonly Neuron[] _neurons;
+        private Neuron[] _neurons;
         private double[,] _weights;
         private NeuronLayer _nextLayer;
+        private bool _isFree;
 
+        public NeuronLayer() {}
         public NeuronLayer(int neuronCount)
         {
             _neurons = new Neuron[neuronCount];
@@ -20,9 +24,12 @@ namespace BotWorld2Core.Game.Ai
         }
         public NeuronLayer(params Neuron[] neurons)
         {
+            Setup(neurons);
+        }
+        public void Setup(Neuron[] neurons)
+        {
             _neurons = neurons;
         }
-
         public void SetNextLayer(NeuronLayer nextLayer)
         {
             var rnd = Global.Random;
@@ -85,6 +92,28 @@ namespace BotWorld2Core.Game.Ai
             if (Length != weights.GetLength(0) || _nextLayer.Length != weights.GetLength(1))
                 throw new ArgumentException();
             _weights = weights;
+        }
+
+        public bool IsElementFree()
+        {
+            return _isFree;
+        }
+
+        public void OnCreate()
+        {
+            _isFree = true;
+        }
+
+        public void OnTake()
+        {
+            _isFree = false;
+        }
+
+        public void ReturnToPool()
+        {
+            _isFree = true;
+            foreach(var neuron in _neurons)
+                neuron.ReturnToPool();
         }
     }
 }
